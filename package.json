@@ -92,7 +92,7 @@
         "clean": "rimraf ./dist",
         "copy-bin": "ncp ./bin ./dist",
         "build": "npm run clean && npm run copy-bin && npm run build:webpack",
-        "build:webpack": "cross-env NODE_ENV=production webpack --progress --config ./webpack/webpack.config.prod.js",
+        "build:webpack": "cross-env NODE_ENV=production webpack --config ./webpack/webpack.config.prod.js",
         "analyzer": "npm run clean && npm run analyzer:webpack",
         "analyzer:webpack": "cross-env NODE_ENV=production webpack --progress --config ./webpack/webpack.config.analyzer.js"
     },
