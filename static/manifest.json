@@ -1,0 +1,21 @@
+{
+    "short_name": "Easysalon",
+    "name": "Easysalon",
+    "icons": [
+        {
+            "src": "/static/assets/logo48.png",
+            "type": "image/png",
+            "sizes": "48x48"
+        },
+        {
+            "src": "/static/assets/logo192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        }
+    ],
+    "start_url": "/",
+    "background_color": "#3686ff",
+    "display": "fullscreen",
+    "theme_color": "#3686ff",
+    "orientation": "landscape"
+}

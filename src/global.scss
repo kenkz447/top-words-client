@@ -1,0 +1,14 @@
+.container {
+    &-small {
+        max-width: 440px!important;
+    }
+    &-medium {
+        max-width: 768px!important;
+    }
+}
+
+.display {
+    &-none {
+        display: none;
+    }
+}
