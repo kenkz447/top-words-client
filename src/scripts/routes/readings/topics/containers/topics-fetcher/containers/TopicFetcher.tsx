@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RestfulRender } from 'react-restful';
 
-import { topicResources } from './node_modules/@/restful';
+import { topicResources } from '@/restful';
 
 interface TopicFetcherProps {
     readonly topicId: number;

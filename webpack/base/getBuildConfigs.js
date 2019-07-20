@@ -104,7 +104,12 @@ module.exports = function getBuildConfig(options) {
             colors: true,
             entrypoints: false,
             children: false,
-            modules: false
+            modules: false,
+            cached: false,
+            cachedAssets: false,
+            chunks: false,
+            chunkModules: false,
+            chunkOrigins: false
         },
         entry: {
             app: './src/index'
