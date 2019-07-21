@@ -12,12 +12,11 @@ import styled from 'styled-components';
 
 import { playAudio } from '@/domain';
 import { text } from '@/i18n';
-import { Article } from '@/restful';
 import { wait } from '@/utilities';
 
 const ArticleLearningWrapper = styled.div`
     margin-bottom: 24px;
-    #goToNextWord {
+    #goToNextWordBtn {
         padding: 0;
         font-size: 21px;
         width: 50px;
@@ -25,7 +24,7 @@ const ArticleLearningWrapper = styled.div`
 `;
 
 interface ArticleLearningProps {
-    readonly article: Article;
+    readonly content: string | string[];
     readonly onCompleted: () => void;
 }
 
@@ -39,7 +38,7 @@ interface ArticleLearningState {
 }
 
 export class ArticleLearning extends React.PureComponent<ArticleLearningProps, ArticleLearningState> {
-    private readonly extraChars = [' ', ','];
+    private readonly extraChars = [' ', ',', '"', '?', '!'];
 
     private _isSpeeching = false;
     get currentTextContent() {
@@ -52,10 +51,13 @@ export class ArticleLearning extends React.PureComponent<ArticleLearningProps, A
     constructor(props: ArticleLearningProps) {
         super(props);
 
-        const articleContent = props.article.content_EN;
+        const articleContent = Array.isArray(props.content)
+            ? props.content
+            : props.content.split('.').map(content => content.trim());
+
         this.state = {
             inputState: 'default',
-            contents: articleContent.split('.').map(content => content.trim()),
+            contents: articleContent.filter(o => !!o),
             currentContentIndex: 0,
             isReadonly: false,
             currentInputValue: ''
@@ -94,19 +96,34 @@ export class ArticleLearning extends React.PureComponent<ArticleLearningProps, A
             return;
         }
 
-        const contentToPlay = this.currentTextContent;
+        const currentInputProcess = this.getCurrentProcessIndex();
+        const allProcess = this.currentTextContent.split(' ');
+        const texts: string[] = [];
+
+        for (let index = currentInputProcess - 1; index < allProcess.length; index++) {
+            texts.push(allProcess[index]);
+        }
+
+        const contentToPlay = texts.join(' ');
 
         this._isSpeeching = true;
-
         await playAudio(contentToPlay);
-
         this._isSpeeching = false;
     }
 
     private readonly onInputKeyUp = async (e: React.KeyboardEvent<HTMLInputElement>) => {
         const enterKeyCode = 13;
-        if (e.keyCode === enterKeyCode) {
-            await this.playTextContent();
+        const isEnter = e.keyCode === enterKeyCode;
+
+        if (e.shiftKey && isEnter) {
+            const toToNextWordBtn = document.getElementById('goToNextWordBtn');
+            if (toToNextWordBtn) {
+                toToNextWordBtn.click();
+            }
+        }
+
+        if (isEnter) {
+            return await this.playTextContent();
         }
     }
 
@@ -118,6 +135,7 @@ export class ArticleLearning extends React.PureComponent<ArticleLearningProps, A
             return;
         }
     }
+
     private readonly onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { isReadonly, currentInputValue } = this.state;
         const { value: nextInputValue } = e.target;
@@ -136,6 +154,7 @@ export class ArticleLearning extends React.PureComponent<ArticleLearningProps, A
 
             this.setState({
                 currentInputValue: nextCurrentInputValue,
+                inputState: 'default',
                 hint: ''
             });
         }
@@ -143,18 +162,10 @@ export class ArticleLearning extends React.PureComponent<ArticleLearningProps, A
 
     private readonly onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         this.setState({
             inputState: 'error'
         });
-
-        setTimeout(
-            () => {
-                this.setState({
-                    inputState: 'default'
-                });
-            },
-            50
-        );
     }
 
     private readonly tryAddExtraCharToInput = () => {
@@ -188,7 +199,7 @@ export class ArticleLearning extends React.PureComponent<ArticleLearningProps, A
 
     private readonly focusInput = () => {
         const inputElement = document.getElementById('learnningInput');
-        
+
         if (!inputElement) {
             return;
         }
@@ -196,18 +207,25 @@ export class ArticleLearning extends React.PureComponent<ArticleLearningProps, A
         inputElement.focus();
     }
 
-    private readonly onGotoNextWordClick = () => {
+    private readonly getCurrentProcessIndex = () => {
         const { currentInputValue } = this.state;
 
         const currentInputProcess = currentInputValue.split(' ');
-        const currentContentProcess = this.currentTextContent.split(' ');
 
-        const word = currentContentProcess[currentInputProcess.length - 1];
+        return currentInputProcess.length - 1;
+    }
+
+    private readonly onGotoNextWordClick = () => {
+        const currentInputProcess = this.getCurrentProcessIndex();
+        const allProcess = this.currentTextContent.split(' ');
+
+        const word = allProcess[currentInputProcess];
 
         const hint = this.extraChars.reduce((prevValue, extraChar) => prevValue.replace(extraChar, ''), word);
 
         this.setState({
-            hint: hint
+            hint: hint,
+            inputState: 'error'
         });
 
         this.focusInput();
@@ -233,7 +251,13 @@ export class ArticleLearning extends React.PureComponent<ArticleLearningProps, A
             <ArticleLearningWrapper className="container-small">
                 <Form onSubmit={this.onSubmit}>
                     <FormGroup label={hint}>
-                        <Label for="learnningInput">{hint}</Label>
+                        <Label for="learnningInput">
+                            {
+                                hint
+                                    ? <span className="text-danger"> ... {hint}</span>
+                                    : text('Hold SHIFT and press ENTER to use cheat!')
+                            }
+                        </Label>
                         <InputGroup>
                             <Input
                                 id="learnningInput"
@@ -248,8 +272,8 @@ export class ArticleLearning extends React.PureComponent<ArticleLearningProps, A
                             />
                             <InputGroupAddon addonType="append">
                                 <Button
-                                    id="goToNextWord"
-                                    color="info"
+                                    id="goToNextWordBtn"
+                                    color="danger"
                                     onClick={this.onGotoNextWordClick}
                                 >
                                     <i className="nc-icon nc-user-run" />

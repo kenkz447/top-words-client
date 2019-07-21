@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import { RootContext } from 'qoobee';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
@@ -13,6 +14,7 @@ const PageHeaderWrapper = styled.header`
     .back {
         height: 30px;
         line-height: 30px;
+        font-size: 16px;
         &-link {
             color: var(--info)!important;
             cursor: pointer;
@@ -35,8 +37,27 @@ export class PageHeader extends React.PureComponent<PageHeaderProps> {
     public static readonly contextType = RootContext;
     public readonly context!: WithDomainContext;
 
+    private readonly renderSubTitle = () => {
+        const {
+            subTitle,
+            description,
+            defaultBackUrl,
+            ...rest
+        } = this.props;
+
+        if (!subTitle) {
+            return null;
+        }
+
+        return (
+            <React.Fragment>
+                &nbsp;- <span className="text-danger">{subTitle}</span>
+            </React.Fragment>
+        );
+    }
+
     public render() {
-        const { history } = this.context;
+        const { history, currentBreakpoint } = this.context;
 
         const {
             subTitle,
@@ -66,18 +87,17 @@ export class PageHeader extends React.PureComponent<PageHeaderProps> {
                     }
                 </div>
                 <div>
-                    <h2>Top Words
-                    {
-                            subTitle !== undefined && (
-                                <React.Fragment>
-                                    &nbsp;- <span className="text-danger">{subTitle}</span>
-                                </React.Fragment>
-                            )
-                        }
-                    </h2>
+                    <h1
+                        className={classNames({
+                            h2: true,
+                            h3: currentBreakpoint === 'sm'
+                        })}
+                    >
+                        Top Words {this.renderSubTitle()}
+                    </h1>
                     <p>{description}</p>
                 </div>
-            </PageHeaderWrapper>
+            </PageHeaderWrapper >
         );
     }
 }

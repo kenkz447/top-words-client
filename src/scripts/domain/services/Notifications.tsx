@@ -1,6 +1,6 @@
 import { events } from 'qoobee';
 import * as React from 'react';
-import { withToastManager } from 'react-toast-notifications';
+import { ToastProvider, withToastManager } from 'react-toast-notifications';
 
 interface NotificationsProps {
     // tslint:disable-next-line:no-any
@@ -14,7 +14,7 @@ class Notifications extends React.PureComponent<NotificationsProps> {
         if (!toastManager) {
             return;
         }
-        
+
         toastManager.add(content, {
             appearance: type,
             autoDismiss: true,
@@ -31,4 +31,6 @@ class Notifications extends React.PureComponent<NotificationsProps> {
     }
 }
 
-export default withToastManager(Notifications);
+const ToastManager = withToastManager(Notifications);
+
+export default () => <ToastProvider><ToastManager /></ToastProvider>;

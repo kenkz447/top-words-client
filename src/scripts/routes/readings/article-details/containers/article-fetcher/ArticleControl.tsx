@@ -5,9 +5,11 @@ import { SlideUp } from '@/components';
 import { text } from '@/i18n';
 import { Article } from '@/restful';
 
-import { ArticleContent } from './article-control';
-import { ArticleHeader } from './article-control/ArticleHeader';
-import { ArticleLearning } from './article-control/ArticleLearning';
+import {
+    ArticleContent,
+    ArticleHeader,
+    ArticleLearning
+} from './article-control';
 
 interface ArticleControlProps {
     readonly article: Article | null;
@@ -39,8 +41,8 @@ export class ArticleControl extends React.PureComponent<ArticleControlProps, Art
                     isLearning ? (
                         <SlideUp>
                             <ArticleLearning
-                                article={article!}
-                                onCompleted={() => this.setState({isLearning: false})}
+                                content={article!.content_EN}
+                                onCompleted={() => this.setState({ isLearning: false })}
                             />
                             <div>
                                 <Button
@@ -49,7 +51,7 @@ export class ArticleControl extends React.PureComponent<ArticleControlProps, Art
                                     disabled={!article}
                                     onClick={() => this.setState({ isLearning: false })}
                                 >
-                                    {text('Stop')} <i className="nc-icon nc-button-stop" />
+                                    <i className="nc-icon nc-minimal-left" /> {text('Stop')}
                                 </Button>
                             </div>
                         </SlideUp>
@@ -60,7 +62,7 @@ export class ArticleControl extends React.PureComponent<ArticleControlProps, Art
                                 <div>
                                     <Button
                                         id="startLearning"
-                                        color="primary"
+                                        color="danger"
                                         disabled={!article}
                                         onClick={() => this.setState({ isLearning: true })}
                                     >
