@@ -116,7 +116,7 @@ module.exports = function getBuildConfig(options) {
         },
         output: {
             publicPath: '/static/',
-            path: path.join(__dirname, '..', 'dist', 'static'),
+            path: path.join(process.cwd(), 'dist', 'static'),
             filename: '[name].[chunkhash].js',
             chunkFilename: '[name].[chunkhash].js'
         },
