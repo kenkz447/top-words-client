@@ -38,7 +38,10 @@ export class ArticleControl extends React.PureComponent<ArticleControlProps, Art
                 {
                     isLearning ? (
                         <SlideUp>
-                            <ArticleLearning article={article!} />
+                            <ArticleLearning
+                                article={article!}
+                                onCompleted={() => this.setState({isLearning: false})}
+                            />
                             <div>
                                 <Button
                                     id="startLearning"

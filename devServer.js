@@ -17,7 +17,8 @@ function run(port) {
         host: defaultHost,
         port: port,
         defineOptions: {
-            API_ENTRY: JSON.stringify('https://top-words-server.herokuapp.com'),
+            // API_ENTRY: JSON.stringify('https://top-words-server.herokuapp.com'),
+            API_ENTRY: JSON.stringify('http://localhost:1338'),
             SUB_ENV: JSON.stringify('dev')
         }
     })

@@ -11,7 +11,10 @@ class Notifications extends React.PureComponent<NotificationsProps> {
 
     private readonly onShowNotification = ({ type, content }) => {
         const { toastManager } = this.props;
-
+        if (!toastManager) {
+            return;
+        }
+        
         toastManager.add(content, {
             appearance: type,
             autoDismiss: true,
