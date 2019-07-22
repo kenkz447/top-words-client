@@ -8,7 +8,7 @@ node {
     }
 
     stage('Run') {
-        sh "docker stop"
-        sh "docker run --rm -d -p 49160:3000 --name TopWordsClient top-words/client"
+        sh "docker ps -q --filter ancestor='top-words/client' | xargs -r docker stop"
+        sh "docker run --rm -d -p 3000:3000 --name TopWordsClient top-words/client"
     }
 }
