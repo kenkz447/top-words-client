@@ -4,7 +4,7 @@ node {
     }
 
     stage('Build image') {
-        sh "docker build -t top-words/client"
+        sh "docker build -t top-words/client ."
     }
 
     stage('Run') {
