@@ -4,7 +4,7 @@ const getBuildConfig = require('./base/getBuildConfigs');
 
 module.exports = getBuildConfig({
     definitions: {
-        API_ENTRY: 'https://top-words-server.herokuapp.com',
+        API_ENTRY: 'https://topwords-api.tungnt.dev',
         SUB_ENV: 'production'
     },
     sourceMap: true,

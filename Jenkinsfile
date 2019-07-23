@@ -1,10 +1,13 @@
 node {
+    
     stage('Clone repository') {
         checkout scm
     }
 
     stage('Build image') {
+        OLD_IMAGE_ID = sh "docker images -a | grep 'top-words/client' | awk '{print $3}'"
         sh "docker build -t top-words/client ."
+        sh "docker rmi ${OLD_IMAGE_ID}"
     }
 
     stage('Run') {
