@@ -27,7 +27,7 @@ export class ArticleContent extends React.PureComponent<ArticleContentProps> {
 
         return (
             <ArticleContentWrapper>
-                <p className="text-justify container-medium">
+                <p className="text-justify container-medium font-size-large">
                     {article.content_EN}
                 </p>
             </ArticleContentWrapper>

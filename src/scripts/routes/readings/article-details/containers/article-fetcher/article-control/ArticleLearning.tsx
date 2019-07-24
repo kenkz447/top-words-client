@@ -144,13 +144,14 @@ export class ArticleLearning extends React.PureComponent<ArticleLearningProps, A
             return;
         }
 
-        const newCharPosition = nextInputValue.length - 1;
+        const newTextPositionStart = currentInputValue.length ? currentInputValue.length : 0;
+        const newTextPositionEnd = nextInputValue.length;
 
-        const correctChar = this.currentTextContent[newCharPosition];
-        const inputedChar = nextInputValue[newCharPosition];
+        const correctText = this.currentTextContent.substring(newTextPositionStart, newTextPositionEnd);
+        const inputedText = nextInputValue.substring(newTextPositionStart, newTextPositionEnd);
 
-        if (correctChar.toLowerCase() === inputedChar.toLowerCase()) {
-            const nextCurrentInputValue = currentInputValue + correctChar;
+        if (correctText.toLowerCase() === inputedText.toLowerCase()) {
+            const nextCurrentInputValue = currentInputValue + correctText;
 
             this.setState({
                 currentInputValue: nextCurrentInputValue,
@@ -250,37 +251,35 @@ export class ArticleLearning extends React.PureComponent<ArticleLearningProps, A
         return (
             <ArticleLearningWrapper className="container-small">
                 <Form onSubmit={this.onSubmit}>
-                    <FormGroup label={hint}>
-                        <Label for="learnningInput">
-                            {
-                                hint
-                                    ? <span className="text-danger"> ... {hint}</span>
-                                    : text('Hold SHIFT and press ENTER to use cheat!')
-                            }
-                        </Label>
-                        <InputGroup>
-                            <Input
-                                id="learnningInput"
-                                placeholder={text('Input your answer...')}
-                                autoFocus={true}
-                                invalid={inputState === 'error'}
-                                valid={inputState === 'success'}
-                                onKeyUp={this.onInputKeyUp}
-                                onKeyDown={this.onInputKeyDown}
-                                value={currentInputValue}
-                                onChange={this.onInputChange}
-                            />
-                            <InputGroupAddon addonType="append">
-                                <Button
-                                    id="goToNextWordBtn"
-                                    color="danger"
-                                    onClick={this.onGotoNextWordClick}
-                                >
-                                    <i className="nc-icon nc-user-run" />
-                                </Button>
-                            </InputGroupAddon>
-                        </InputGroup>
-                    </FormGroup>
+                    <Label for="learnningInput">
+                        {
+                            hint
+                                ? <span className="text-danger"> ... {hint}</span>
+                                : text('Hold SHIFT and press ENTER to use cheat!')
+                        }
+                    </Label>
+                    <InputGroup>
+                        <Input
+                            id="learnningInput"
+                            placeholder={text('Input your answer...')}
+                            autoFocus={true}
+                            invalid={inputState === 'error'}
+                            valid={inputState === 'success'}
+                            onKeyUp={this.onInputKeyUp}
+                            onKeyDown={this.onInputKeyDown}
+                            value={currentInputValue}
+                            onChange={this.onInputChange}
+                        />
+                        <InputGroupAddon addonType="append">
+                            <Button
+                                id="goToNextWordBtn"
+                                color="danger"
+                                onClick={this.onGotoNextWordClick}
+                            >
+                                <i className="nc-icon nc-user-run" />
+                            </Button>
+                        </InputGroupAddon>
+                    </InputGroup>
                     <input className="display-none" type="submit" />
                 </Form>
             </ArticleLearningWrapper>
