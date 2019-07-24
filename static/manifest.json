@@ -1,6 +1,6 @@
 {
-    "short_name": "Easysalon",
-    "name": "Easysalon",
+    "short_name": "topwords",
+    "name": "Top Words",
     "icons": [
         {
             "src": "/static/assets/logo48.png",
@@ -16,6 +16,6 @@
     "start_url": "/",
     "background_color": "#3686ff",
     "display": "fullscreen",
-    "theme_color": "#3686ff",
-    "orientation": "landscape"
+    "theme_color": "#f5593d",
+    "orientation": "portrait"
 }

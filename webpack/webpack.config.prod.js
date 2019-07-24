@@ -9,5 +9,5 @@ module.exports = getBuildConfig({
     },
     sourceMap: true,
     compression: true,
-    gaID: 'UA-135627950-1'
+    gaID: 'UA-135627950-2'
 })

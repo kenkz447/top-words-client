@@ -20,7 +20,7 @@ const AppContent = () => (
         ErrorPage={ErrorPage}
         setup={() => {
             Sentry.init({
-                dsn: 'https://025958a33b0f4f00803533fb31956730@sentry.io/1404850',
+                dsn: 'https://735c3a992fd24429b4b42ea2679ce92a@sentry.io/1512148',
                 environment: SUB_ENV
             });
             Sentry.configureScope((scope) => {
@@ -28,6 +28,10 @@ const AppContent = () => (
             });
         }}
         onError={({ error, errorInfo }) => {
+            if (!error) {
+                return null;
+            }
+
             Sentry.withScope(scope => {
                 if (errorInfo) {
                     Object.keys(errorInfo).forEach(key => {
