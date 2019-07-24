@@ -51,8 +51,7 @@ module.exports = function getBuildConfig(options) {
     }));
 
     plugins.push(new ForkTsCheckerWebpackPlugin({
-        checkSyntacticErrors: true,
-        memoryLimit: 1024
+        checkSyntacticErrors: true
     }));
 
     plugins.push(new webpack.NamedChunksPlugin());
