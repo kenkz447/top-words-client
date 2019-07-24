@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RestfulRender } from 'react-restful';
+import { RequestParameter, RestfulRender } from 'react-restful';
 
 import { articleResources } from '@/restful';
 
@@ -9,18 +9,31 @@ interface ArticleFetcherProps {
     readonly topicId: number;
 }
 
-export class ArticleFetcher extends React.PureComponent<ArticleFetcherProps> {
+interface ArticleFetcherState {
+    readonly params: RequestParameter[];
+}
+
+export class ArticleFetcher extends React.PureComponent<ArticleFetcherProps, ArticleFetcherState> {
+
+    constructor(props: ArticleFetcherProps) {
+        super(props);
+
+        this.state = {
+            params: [{
+                type: 'path',
+                parameter: 'id',
+                value: props.topicId
+            }]
+        };
+    }
+    
     public render() {
-        const { topicId } = this.props;
+        const { params } = this.state;
 
         return (
             <RestfulRender
                 resource={articleResources.getOne}
-                parameters={{
-                    type: 'path',
-                    parameter: 'id',
-                    value: topicId
-                }}
+                parameters={params}
             >
                 {({ data }) => {
                     return (

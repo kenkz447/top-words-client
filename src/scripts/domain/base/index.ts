@@ -1,4 +1,6 @@
 export * from './AuthClient';
+export * from './BaseComponent';
+export * from './BasePaginationComponent';
 export * from './Types';
 export * from './playAudio';
 export * from './utilities';

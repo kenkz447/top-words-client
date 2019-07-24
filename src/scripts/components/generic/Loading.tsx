@@ -41,5 +41,5 @@ export function Loading(props: LoadingProps) {
 }
 
 Loading.defaultProps = {
-    delayMS: 0
+    delayMS: 1000
 };

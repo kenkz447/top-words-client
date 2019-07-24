@@ -28,7 +28,7 @@ export class TopicList extends React.Component<TopicListProps> {
 
         if (loading) {
             return (
-                <Loading delayMS={0} />
+                <Loading />
             );
         }
 

@@ -1,14 +1,31 @@
+@media screen and (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+}
+
 .container {
     &-small {
-        max-width: 440px!important;
+        max-width: 440px !important;
     }
+
     &-medium {
-        max-width: 768px!important;
+        max-width: 768px !important;
     }
 }
 
 .display {
     &-none {
         display: none;
+    }
+
+    &-flex {
+        display: flex;
+    }
+}
+
+.flex-direction {
+    &-row-reverse {
+        flex-direction: row-reverse;
     }
 }

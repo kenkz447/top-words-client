@@ -12,8 +12,8 @@ export const articleType = new ResourceType<Article>({
 });
 
 export const articleResources = {
-    count: new Resource<string>({
-        url: '/articles'
+    count: new Resource<number>({
+        url: '/articles/count'
     }),
     getAll: new Resource<Article, Article[]>({
         resourceType: articleType,

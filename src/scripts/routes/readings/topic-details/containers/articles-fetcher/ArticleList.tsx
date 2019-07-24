@@ -3,16 +3,17 @@ import { Link } from 'react-router-dom';
 import { ListGroup, ListGroupItem } from 'reactstrap';
 import styled from 'styled-components';
 
-import { Loading, SlideUp } from '@/components';
+import { SlideUp } from '@/components';
 import { READINGS_ARTICLE_URL } from '@/configs';
 import { Article } from '@/restful';
 import { replaceRoutePath } from '@/utilities';
 
 const ArticleListWrapper = styled.div`
-    max-width: 440px;
+    flex-grow: 1;
 `;
 
 interface ArticleListProps {
+    readonly className?: string;
     readonly articles: Article[];
     readonly loading: boolean;
 }
@@ -24,16 +25,10 @@ export class ArticleList extends React.Component<ArticleListProps> {
     };
 
     public render() {
-        const { articles, loading } = this.props;
-
-        if (loading) {
-            return (
-                <Loading delayMS={0} />
-            );
-        }
+        const { articles, className } = this.props;
 
         return (
-            <ArticleListWrapper>
+            <ArticleListWrapper className={className}>
                 <SlideUp>
                     <ListGroup>
                         {
