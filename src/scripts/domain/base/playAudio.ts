@@ -16,7 +16,7 @@ const play = (blobUrl) => {
     });
 };
 
-export const playAudio = async (text) => {
+export const playAudio = async (text: string, rate: number = 1) => {
     const response = await request(
         speechResources.getSpeech,
         [{
@@ -26,7 +26,7 @@ export const playAudio = async (text) => {
         }, {
             type: 'query',
             parameter: 'rate',
-            value: .8
+            value: rate
         }]
     );
 

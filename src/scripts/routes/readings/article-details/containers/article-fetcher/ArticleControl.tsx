@@ -43,17 +43,9 @@ export class ArticleControl extends React.PureComponent<ArticleControlProps, Art
                             <ArticleLearning
                                 content={article!.content_EN}
                                 onCompleted={() => this.setState({ isLearning: false })}
+                                onStop={() => this.setState({ isLearning: false })}
                             />
-                            <div>
-                                <Button
-                                    id="startLearning"
-                                    color="danger"
-                                    disabled={!article}
-                                    onClick={() => this.setState({ isLearning: false })}
-                                >
-                                    <i className="nc-icon nc-minimal-left" /> {text('Stop')}
-                                </Button>
-                            </div>
+                            
                         </SlideUp>
                     )
                         : (
