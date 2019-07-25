@@ -57,7 +57,11 @@ export class ArticleLearning extends React.PureComponent<ArticleLearningProps, A
 
         this.state = {
             inputState: 'default',
-            contents: articleContent.filter(o => !!o),
+            contents: articleContent
+                .filter(o => !!o)
+                // Replace char code 160 with 32 (space char)
+                .map(o => o.replace(/\s+/g, ' ')),
+            
             currentContentIndex: 0,
             isReadonly: false,
             currentInputValue: ''
@@ -173,7 +177,7 @@ export class ArticleLearning extends React.PureComponent<ArticleLearningProps, A
         const { currentInputValue } = this.state;
 
         const nextInputCharPosition = currentInputValue.length;
-        const nextCorrectChar = this.currentTextContent[nextInputCharPosition];
+        const nextCorrectChar = this.currentTextContent.charAt(nextInputCharPosition);
 
         const nextCharIsExtra = this.extraChars.includes(nextCorrectChar);
 
