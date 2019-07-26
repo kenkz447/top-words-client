@@ -35,6 +35,7 @@ export class ArticlePrevNext extends React.PureComponent<ArticlePrevNextProps> {
                             <PaginationItem disabled={!data || !data.prev}>
                                 <PaginationLink
                                     tag={Link}
+                                    replace={true}
                                     to={data && replaceRoutePath(READINGS_ARTICLE_URL, data.prev)}
                                     previous={true}
                                     href="#"
@@ -43,6 +44,7 @@ export class ArticlePrevNext extends React.PureComponent<ArticlePrevNextProps> {
                             <PaginationItem disabled={!data || !data.next}>
                                 <PaginationLink
                                     tag={Link}
+                                    replace={true}
                                     to={data && replaceRoutePath(READINGS_ARTICLE_URL, data.next)}
                                     next={true}
                                     href="#"

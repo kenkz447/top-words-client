@@ -1,8 +1,9 @@
 node {
-  IMAGE_NAME = "top-words/client";
-  CONTAINER_NAME = "TopWordsClient";
+  PORT              = 3000
+  IMAGE_NAME        = "top-words/client";
+  CONTAINER_NAME    = "TopWordsClient";
 
-  OLD_CONTAINER_ID = sh (
+  OLD_CONTAINER_ID  = sh (
     script: "docker ps -q --filter name=${CONTAINER_NAME}",
     returnStdout: true
   )
@@ -21,7 +22,7 @@ node {
       sh "docker rm ${OLD_CONTAINER_ID}"
     }
 
-    sh "docker run -d -p 1337:1337 -dit --restart unless-stopped  --name ${CONTAINER_NAME} ${IMAGE_NAME}"
+    sh "docker run -d -p ${PORT}:${PORT} -dit --restart unless-stopped  --name ${CONTAINER_NAME} ${IMAGE_NAME}"
   }
 
   stage('Finish') {
