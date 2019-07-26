@@ -22,5 +22,8 @@ export const articleResources = {
     getOne: new Resource<Article, Article>({
         resourceType: articleType,
         url: '/articles/:id'
+    }),
+    getNextAndPrev: new Resource<Article, { readonly prev: Article, readonly next: Article }>({
+        url: '/articles/prev-and-next/:id'
     })
 };

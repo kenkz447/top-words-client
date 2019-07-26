@@ -33,7 +33,7 @@ export class ArticleLearningBase<P> extends BaseComponent<
 
     public readonly maxSeechRate = 1;
     public readonly minSeechRate = .6;
-    public readonly speechRateStep = .1;
+    public readonly speechRateStep = .2;
 
     public _isSpeeching = false;
     public _speechRate = 1;
@@ -88,7 +88,8 @@ export class ArticleLearningBase<P> extends BaseComponent<
         if (currentContentIndex === contents.length - 1) {
             return onCompleted();
         }
-
+        
+        this.insertSpeechRate();
         this.setState({
             isReadonly: false,
             currentContentIndex: currentContentIndex + 1,
@@ -171,7 +172,6 @@ export class ArticleLearningBase<P> extends BaseComponent<
                 inputState: 'default',
                 hint: ''
             });
-            this.insertSpeechRate();
         }
     }
 

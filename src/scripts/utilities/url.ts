@@ -50,7 +50,9 @@ export const redirect = (uri) => {
     }
 };
 
-export const replaceRoutePath = (path: string, obj: {}, searchParams?: URLSearchParams | string) => {
+export const replaceRoutePath = (path: string, obj: {} = {}, searchParams?: URLSearchParams | string) => {
+
+
     const replacedPath = Object.keys(obj).reduce(
         (url, key) => {
             const regex = new RegExp(`:${key}.?`, 'g');

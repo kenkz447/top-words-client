@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button } from 'reactstrap';
+import { Button, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
 import { SlideUp } from '@/components';
 import { text } from '@/i18n';
@@ -8,7 +8,8 @@ import { Article } from '@/restful';
 import {
     ArticleContent,
     ArticleHeader,
-    ArticleLearning
+    ArticleLearning,
+    ArticlePrevNext
 } from './article-control';
 
 interface ArticleControlProps {
@@ -45,21 +46,26 @@ export class ArticleControl extends React.PureComponent<ArticleControlProps, Art
                                 onCompleted={() => this.setState({ isLearning: false })}
                                 onStop={() => this.setState({ isLearning: false })}
                             />
-                            
+
                         </SlideUp>
                     )
                         : (
-                            <SlideUp>
+                            <SlideUp className=" container-medium ">
                                 <ArticleContent article={article} />
-                                <div>
-                                    <Button
-                                        id="startLearning"
-                                        color="danger"
-                                        disabled={!article}
-                                        onClick={() => this.setState({ isLearning: true })}
-                                    >
-                                        {text('Start')} <i className="nc-icon nc-button-play" />
-                                    </Button>
+                                <div className="d-flex">
+                                    <div className="flex-grow-1">
+                                        <Button
+                                            id="startLearning"
+                                            color="danger"
+                                            disabled={!article}
+                                            onClick={() => this.setState({ isLearning: true })}
+                                        >
+                                            {text('Start')} <i className="nc-icon nc-button-play" />
+                                        </Button>
+                                    </div>
+                                    <div>
+                                        <ArticlePrevNext article={article} />
+                                    </div>
                                 </div>
                             </SlideUp>
                         )

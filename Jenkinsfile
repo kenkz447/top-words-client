@@ -1,16 +1,30 @@
 node {
-    
-    stage('Clone repository') {
-        checkout scm
+  IMAGE_NAME = "top-words/client";
+  CONTAINER_NAME = "TopWordsClient";
+
+  OLD_CONTAINER_ID = sh (
+    script: "docker ps -q --filter name=${CONTAINER_NAME}",
+    returnStdout: true
+  )
+
+  stage('Clone repository') {
+    checkout scm
+  }
+
+  stage('Build image') {
+    sh "docker build --rm -t ${IMAGE_NAME} ."
+  }
+
+  stage('Run') {
+    if(OLD_CONTAINER_ID) {
+      sh "docker stop ${OLD_CONTAINER_ID}"
+      sh "docker rm ${OLD_CONTAINER_ID}"
     }
 
-    stage('Build image') {
-        sh "docker build --rm -t top-words/client ."
-    }
+    sh "docker run -d -p 1337:1337 -dit --restart unless-stopped  --name ${CONTAINER_NAME} ${IMAGE_NAME}"
+  }
 
-    stage('Run') {
-        sh "docker ps -q --filter name='TopWordsClient' | xargs -r docker stop"
-        sh "docker run --rm -d -p 3000:3000 --name TopWordsClient top-words/client"
-        sh "docker rmi \$(docker images -f dangling=true -q)"
-    }
+  stage('Finish') {
+    sh "docker rmi \$(docker images -f dangling=true -q)"
+  }
 }

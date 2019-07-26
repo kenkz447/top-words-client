@@ -9,31 +9,19 @@ interface ArticleFetcherProps {
     readonly topicId: number;
 }
 
-interface ArticleFetcherState {
-    readonly params: RequestParameter[];
-}
+export class ArticleFetcher extends React.PureComponent<ArticleFetcherProps> {
 
-export class ArticleFetcher extends React.PureComponent<ArticleFetcherProps, ArticleFetcherState> {
-
-    constructor(props: ArticleFetcherProps) {
-        super(props);
-
-        this.state = {
-            params: [{
-                type: 'path',
-                parameter: 'id',
-                value: props.topicId
-            }]
-        };
-    }
-    
     public render() {
-        const { params } = this.state;
+        const { topicId } = this.props;
 
         return (
             <RestfulRender
                 resource={articleResources.getOne}
-                parameters={params}
+                parameters={{
+                    type: 'path',
+                    parameter: 'id',
+                    value: topicId
+                }}
             >
                 {({ data }) => {
                     return (
