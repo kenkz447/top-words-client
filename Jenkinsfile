@@ -4,7 +4,7 @@ node {
   CONTAINER_NAME    = "TopWordsClient";
 
   OLD_CONTAINER_ID  = sh (
-    script: "docker ps -q --filter name=${CONTAINER_NAME}",
+    script: "docker ps -ql --filter name=${CONTAINER_NAME}",
     returnStdout: true
   )
 
