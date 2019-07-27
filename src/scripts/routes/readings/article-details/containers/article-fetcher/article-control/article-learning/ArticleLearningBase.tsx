@@ -1,3 +1,4 @@
+import { events } from 'qoobee';
 import * as React from 'react';
 
 import { BaseComponent, playAudio } from '@/domain';
@@ -56,6 +57,9 @@ export class ArticleLearningBase<P> extends BaseComponent<
             isReadonly: false,
             currentInputValue: ''
         };
+
+        events.addListener('ARTICLE_LEARNING_PLAY_TEXT', () => this.desertSpeechRate());
+        events.addListener('ARTICLE_LEARNING_COMPLETED_WORD', () => this.insertSpeechRate());
     }
 
     private readonly insertSpeechRate = () => {
@@ -88,8 +92,7 @@ export class ArticleLearningBase<P> extends BaseComponent<
         if (currentContentIndex === contents.length - 1) {
             return onCompleted();
         }
-        
-        this.insertSpeechRate();
+
         this.setState({
             isReadonly: false,
             currentContentIndex: currentContentIndex + 1,
@@ -122,7 +125,7 @@ export class ArticleLearningBase<P> extends BaseComponent<
         await playAudio(contentToPlay, this._speechRate);
         this._isSpeeching = false;
 
-        this.desertSpeechRate();
+        events.emit('ARTICLE_LEARNING_PLAY_TEXT', { content: contentToPlay });
     }
 
     public readonly onInputKeyUp = async (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -198,6 +201,10 @@ export class ArticleLearningBase<P> extends BaseComponent<
         this.setState({
             currentInputValue: currentInputValue + nextCorrectChar
         });
+
+        if (nextCorrectChar === ' ') {
+            events.emit('ARTICLE_LEARNING_COMPLETED_WORD');
+        }
     }
 
     public readonly tryGoToNextContent = () => {
