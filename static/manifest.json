@@ -1,6 +1,5 @@
 {
     "short_name": "Top Words",
-    "name": "Top Words",
     "icons": [
         {
             "src": "/static/assets/logo-192.png",
@@ -14,7 +13,7 @@
         }
     ],
     "start_url": "/",
-    "background_color": "#f5593d",
+    "background_color": "#FFFFFF",
     "display": "fullscreen",
     "theme_color": "#f5593d",
     "orientation": "portrait"
