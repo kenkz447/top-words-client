@@ -14,9 +14,7 @@ workbox.core.clientsClaim();
 self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-self.addEventListener('activate', (event) => {
-    workbox.precaching.cleanupOutdatedCaches();
-});
+workbox.precaching.cleanupOutdatedCaches();
 
 workbox.routing.registerNavigationRoute(
     workbox.precaching.getCacheKeyForURL("/static/index.html")
@@ -33,7 +31,7 @@ workbox.routing.registerRoute(
 
 workbox.routing.registerRoute(
     /\.*/g,
-    new workbox.strategies.NetworkFirst({
+    new workbox.strategies.CacheFirst({
         cacheName: "runtimeCaching",
         plugins: [new workbox.expiration.Plugin({ maxAgeSeconds: 86400, purgeOnQuotaError: false })]
     }),
