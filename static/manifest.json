@@ -1,16 +1,16 @@
 {
-    "short_name": "topwords",
+    "short_name": "Top Words",
     "name": "Top Words",
     "icons": [
         {
-            "src": "/static/assets/logo48.png",
-            "type": "image/png",
-            "sizes": "48x48"
-        },
-        {
-            "src": "/static/assets/logo192.png",
+            "src": "/static/assets/logo-192.png",
             "type": "image/png",
             "sizes": "192x192"
+        },
+        {
+            "src": "/static/assets/logo-512.png",
+            "type": "image/png",
+            "sizes": "512x512"
         }
     ],
     "start_url": "/",
