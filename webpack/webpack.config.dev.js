@@ -47,22 +47,12 @@ module.exports = (options) => {
                         loader: "style-loader"
                     }, {
                         loader: 'css-loader',
-                    }, {
-                        loader: "resolve-url-loader",
                         options: {
-                            silent: true,
-                            root: ''
+                            url: false
                         }
                     }, {
-                        loader: "sass-loader",
-                        options: {
-                            includePaths: [path.resolve(process.cwd(), 'src')]
-                        }
+                        loader: "sass-loader"
                     }]
-                }, {
-                    test: /(\.less)$/,
-                    loader: 'less-loader',
-                    options: baseBuildConfig.lessLoaderOptions
                 },
                 {
                     test: /\.tsx?$/,
@@ -78,9 +68,7 @@ module.exports = (options) => {
                         loader: 'ts-nameof-loader'
                     }],
                     exclude: /node_modules/
-                },
-                baseBuildConfig.modules.rules.fonts,
-                baseBuildConfig.modules.rules.images
+                }
             ]
         },
         resolve: {

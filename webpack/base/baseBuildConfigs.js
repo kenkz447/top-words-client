@@ -9,18 +9,6 @@ module.exports = {
                 test: /\.tsx?$/,
                 use: 'happypack/loader?id=ts',
                 exclude: /node_modules/
-            },
-            fonts: {
-                test: /\.(eot|svg|ttf|woff|woff2)$/,
-                use: [{
-                    loader: 'file-loader?name=[name].[ext]'
-                }]
-            },
-            images: {
-                test: /\.(jpe?g|png|gif|svg)$/i,
-                use: [{
-                    loader: 'file-loader?name=[name].[ext]'
-                }]
             }
         }
     },

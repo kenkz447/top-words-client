@@ -1,4 +1,4 @@
-import './global.scss';
+import './styles.scss';
 
 import { startup } from './scripts';
 

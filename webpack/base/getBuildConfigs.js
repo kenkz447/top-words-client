@@ -158,33 +158,17 @@ module.exports = function getBuildConfig(options) {
                     use: [
                         MiniCssExtractPlugin.loader,
                         {
-                            loader: 'css-loader'
-                        }, {
-                            loader: 'resolve-url-loader',
-                        }, {
-                            loader: 'sass-loader',
+                            loader: 'css-loader',
                             options: {
-                                includePaths: [path.resolve(__dirname, 'src')]
+                                url: false
                             }
-                        }
-                    ]
-                }, {
-                    test: /\.(less)$/,
-                    use: [
-                        MiniCssExtractPlugin.loader,
+                        },
                         {
-                            loader: 'css-loader'
-                        }, {
-                            loader: 'resolve-url-loader',
-                        }, {
-                            loader: 'less-loader',
-                            options: baseBuildConfig.lessLoaderOptions
+                            loader: 'sass-loader'
                         }
                     ]
                 },
-                baseBuildConfig.modules.rules.typescript,
-                baseBuildConfig.modules.rules.fonts,
-                baseBuildConfig.modules.rules.images
+                baseBuildConfig.modules.rules.typescript
             ]
         },
         resolve: {
