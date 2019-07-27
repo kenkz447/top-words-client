@@ -32,9 +32,10 @@ export class ArticleLearningBase<P> extends BaseComponent<
 
     public readonly extraChars = [' ', ',', '"', '?', '!'];
 
+    public readonly initSeechRate = .85;
     public readonly maxSeechRate = 1;
-    public readonly minSeechRate = .6;
-    public readonly speechRateStep = .2;
+    public readonly minSeechRate = .7;
+    public readonly speechRateStep = 0.15;
 
     public _isSpeeching = false;
     public _speechRate = 1;
@@ -60,6 +61,11 @@ export class ArticleLearningBase<P> extends BaseComponent<
 
         events.addListener('ARTICLE_LEARNING_PLAY_TEXT', () => this.desertSpeechRate());
         events.addListener('ARTICLE_LEARNING_COMPLETED_WORD', () => this.insertSpeechRate());
+        events.addListener('ARTICLE_LEARNING_COMPLETED_CONTENT', () => this.resetSpeechRate());
+    }
+
+    private readonly resetSpeechRate = () => {
+        this._speechRate = this.initSeechRate;
     }
 
     private readonly insertSpeechRate = () => {
@@ -216,6 +222,7 @@ export class ArticleLearningBase<P> extends BaseComponent<
             return;
         }
 
+        events.emit('ARTICLE_LEARNING_COMPLETED_CONTENT');
         this.goToNextContent();
     }
 
