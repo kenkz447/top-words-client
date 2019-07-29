@@ -42,7 +42,7 @@ export class ArticleControl extends React.PureComponent<ArticleControlProps, Art
                     isLearning ? (
                         <SlideUp>
                             <ArticleLearning
-                                content={article!.content_EN}
+                                content={article!.content}
                                 onCompleted={() => this.setState({ isLearning: false })}
                                 onStop={() => this.setState({ isLearning: false })}
                             />

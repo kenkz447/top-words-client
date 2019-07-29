@@ -3,8 +3,7 @@ import { Resource, ResourceType } from 'react-restful';
 export interface Article {
     readonly id: string;
     readonly name: string;
-    readonly content_EN: string;
-    readonly content_VI: string;
+    readonly content: string;
 }
 
 export const articleType = new ResourceType<Article>({
