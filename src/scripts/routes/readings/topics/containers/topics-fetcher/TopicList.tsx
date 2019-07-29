@@ -9,7 +9,7 @@ import { Topic } from '@/restful';
 import { replaceRoutePath } from '@/utilities';
 
 const TopicListWrapper = styled.div`
-    max-width: 440px;
+    display: block;
 `;
 
 interface TopicListProps {
@@ -42,7 +42,7 @@ export class TopicList extends React.Component<TopicListProps> {
                                     <ListGroupItem
                                         key={topic.id}
                                         tag={Link}
-                                        to={replaceRoutePath(READINGS_TOPIC_URL, topic)}
+                                        to={replaceRoutePath(READINGS_TOPIC_URL, { topicSlug: topic.slug })}
                                         action={true}
                                     >
                                         {topic.name}

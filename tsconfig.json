@@ -26,7 +26,8 @@
         "target": "es5",
         "allowSyntheticDefaultImports": true,
         "skipLibCheck": true,
-        "incremental": true
+        "incremental": true,
+        "downlevelIteration": true
     },
     "exclude": [
         "node_modules",

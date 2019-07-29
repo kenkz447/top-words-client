@@ -4,6 +4,7 @@ export interface Article {
     readonly id: string;
     readonly name: string;
     readonly content: string;
+    readonly slug: string;
 }
 
 export const articleType = new ResourceType<Article>({

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { Loading } from '@/components';
 import { text } from '@/i18n';
 import { Article } from '@/restful';
 
@@ -10,7 +9,7 @@ const ArticleHeaderWrapper = styled.article`
 `;
 
 interface ArticleHeaderProps {
-    readonly article: Article | null;
+    readonly article: Article;
 }
 
 export class ArticleHeader extends React.PureComponent<ArticleHeaderProps> {

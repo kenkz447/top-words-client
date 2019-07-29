@@ -4,25 +4,27 @@ import { RestfulRender } from 'react-restful';
 import { topicResources } from '@/restful';
 
 interface TopicFetcherProps {
-    readonly topicId: number;
+    readonly topicSlug: string;
 }
 
 export class TopicFetcher extends React.PureComponent<TopicFetcherProps> {
     public render() {
-        const { topicId } = this.props;
-        
+        const { topicSlug } = this.props;
+
         return (
             <RestfulRender
-                resource={topicResources.getOne}
+                resource={topicResources.getAll}
                 parameters={{
-                    type: 'path',
-                    parameter: 'id',
-                    value: topicId
+                    type: 'query',
+                    parameter: 'slug',
+                    value: topicSlug
                 }}
             >
                 {({ data, fetching }) => {
                     return (
-                        <p className="mb-3 h4"><span className="text-muted">Topic: </span> {data ? data.name : '{...}'}</p>
+                        <p className="mb-3 h4"><span className="text-muted">
+                            Topic: </span> {data ? data[0].name : '{...}'}
+                        </p>
                     );
                 }}
             </RestfulRender>

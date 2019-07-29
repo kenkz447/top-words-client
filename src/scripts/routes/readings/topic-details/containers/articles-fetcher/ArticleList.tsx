@@ -13,19 +13,20 @@ const ArticleListWrapper = styled.div`
 `;
 
 interface ArticleListProps {
+    readonly topicSlug: string;
     readonly className?: string;
     readonly articles: Article[];
     readonly loading: boolean;
 }
 
 export class ArticleList extends React.Component<ArticleListProps> {
-    public static readonly defaultProps: ArticleListProps = {
+    public static readonly defaultProps = {
         loading: false,
         articles: []
     };
 
     public render() {
-        const { articles, className } = this.props;
+        const { articles, className, topicSlug } = this.props;
 
         return (
             <ArticleListWrapper className={className}>
@@ -33,11 +34,19 @@ export class ArticleList extends React.Component<ArticleListProps> {
                     <ListGroup>
                         {
                             articles.map(article => {
+                                const to = replaceRoutePath(
+                                    READINGS_ARTICLE_URL,
+                                    {
+                                        topicSlug: topicSlug,
+                                        articleSlug: article.slug
+                                    }
+                                );
+
                                 return (
                                     <ListGroupItem
                                         key={article.id}
                                         tag={Link}
-                                        to={replaceRoutePath(READINGS_ARTICLE_URL, article)}
+                                        to={to}
                                         action={true}
                                     >
                                         {article.name}

@@ -13,7 +13,7 @@ import {
 } from './article-control';
 
 interface ArticleControlProps {
-    readonly article: Article | null;
+    readonly article: Article;
 }
 
 interface ArticleControlState {

@@ -12,12 +12,16 @@ const PageHeaderWrapper = styled.header`
     margin-bottom: 24px;
     
     .back {
-        height: 30px;
-        line-height: 30px;
+        height: 36px;
+        line-height: 36px;
         font-size: 16px;
         &-link {
             color: var(--info)!important;
-            cursor: pointer;
+            height: inherit;
+            img {
+                height: inherit;
+                width: auto;
+            }
         }
     }
 `;
@@ -51,7 +55,7 @@ export class PageHeader extends React.PureComponent<PageHeaderProps> {
 
         return (
             <React.Fragment>
-                &nbsp;- <span className="text-danger">{subTitle}</span>
+                - <span className="text-danger">{subTitle}</span>
             </React.Fragment>
         );
     }
@@ -73,7 +77,7 @@ export class PageHeader extends React.PureComponent<PageHeaderProps> {
                         defaultBackUrl !== undefined && (
                             defaultBackUrl !== '' ? (
                                 <Link className="back-link" to={defaultBackUrl}>
-                                    <span>{text('Back')}</span>
+                                    <img alt="back-icon" src="/static/assets/icon-back.svg" />
                                 </Link>
                             )
                                 : (

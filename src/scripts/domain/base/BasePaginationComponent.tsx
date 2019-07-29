@@ -47,7 +47,7 @@ export class BasePaginationComponent<P = {}, S = {}> extends BaseComponent<P, S 
     }
 
     public componentDidMount() {
-        request(this.state.countItemResource).then(
+        request(this.state.countItemResource, this.state.requestParams).then(
             (totalItem) => {
                 // tslint:disable-next-line:no-any
                 this.setState({ totalItem: totalItem as any });

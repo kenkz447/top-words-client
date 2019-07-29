@@ -4,10 +4,17 @@ export const getUrlSearchParam = (key: string) => {
     return currentUrlParams.get(key);
 };
 
-export const getUrlSearchParams = (key: string) => {
-    const currentUrlParams = new URLSearchParams(location.search);
+export const getSearchParamsObj = () => {
+    const search = location.search;
+    const params = new URLSearchParams(search);
+    const paramObj = {};
+    const allParamKeys = params.keys();
 
-    return currentUrlParams.getAll(key);
+    for (const paramKey of allParamKeys) {
+        paramObj[paramKey] = params.get(paramKey);
+    }
+
+    return paramObj;
 };
 
 export const searchParamsObject = <T>(query?: string): T => {
@@ -51,11 +58,9 @@ export const redirect = (uri) => {
 };
 
 export const replaceRoutePath = (path: string, obj: {} = {}, searchParams?: URLSearchParams | string) => {
-
-
     const replacedPath = Object.keys(obj).reduce(
         (url, key) => {
-            const regex = new RegExp(`:${key}.?`, 'g');
+            const regex = new RegExp(`:${key}`, 'g');
 
             return url.replace(regex, obj[key]);
         },

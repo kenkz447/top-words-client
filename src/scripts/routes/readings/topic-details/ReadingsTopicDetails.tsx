@@ -8,7 +8,7 @@ import { text } from '@/i18n';
 
 import { ArticlesFetcher, TopicFetcher } from './containers';
 
-type ReadingsTopicDetailsProps = AppPageProps<{ readonly id: number }>;
+type ReadingsTopicDetailsProps = AppPageProps<{ readonly topicSlug: string }>;
 
 export class ReadingsTopicDetails extends RoutePage<ReadingsTopicDetailsProps> {
     public static readonly routeInfo: RouteInfo = {
@@ -22,9 +22,8 @@ export class ReadingsTopicDetails extends RoutePage<ReadingsTopicDetailsProps> {
     public readonly context!: WithDomainContext;
 
     public render() {
-
         const { match } = this.props;
-        const topicId = match.params.id;
+        const { topicSlug } = match.params;
 
         return (
             <PageWrapper>
@@ -34,8 +33,8 @@ export class ReadingsTopicDetails extends RoutePage<ReadingsTopicDetailsProps> {
                     description={text('Select a artile in this topic to start learning.')}
                 />
                 <PageContent>
-                    <TopicFetcher topicId={topicId} />
-                    <ArticlesFetcher topicId={topicId} />
+                    <TopicFetcher topicSlug={topicSlug} />
+                    <ArticlesFetcher topicSlug={topicSlug} />
                 </PageContent>
             </PageWrapper>
         );

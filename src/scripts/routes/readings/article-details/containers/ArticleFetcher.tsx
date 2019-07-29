@@ -1,31 +1,36 @@
 import * as React from 'react';
-import { RequestParameter, RestfulRender } from 'react-restful';
+import { RestfulRender } from 'react-restful';
 
+import { Loading } from '@/components';
 import { articleResources } from '@/restful';
 
 import { ArticleControl } from './article-fetcher';
 
 interface ArticleFetcherProps {
-    readonly topicId: number;
+    readonly articleSlug: string;
 }
 
 export class ArticleFetcher extends React.PureComponent<ArticleFetcherProps> {
 
     public render() {
-        const { topicId } = this.props;
+        const { articleSlug } = this.props;
 
         return (
             <RestfulRender
-                resource={articleResources.getOne}
+                resource={articleResources.getAll}
                 parameters={{
-                    type: 'path',
-                    parameter: 'id',
-                    value: topicId
+                    type: 'query',
+                    parameter: 'slug',
+                    value: articleSlug
                 }}
             >
                 {({ data }) => {
+                    if (!data) {
+                        return <Loading />;
+                    }
+
                     return (
-                        <ArticleControl article={data} />
+                        <ArticleControl article={data[0]} />
                     );
                 }}
             </RestfulRender>

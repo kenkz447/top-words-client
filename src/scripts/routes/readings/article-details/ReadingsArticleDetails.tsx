@@ -1,21 +1,20 @@
-import { RootContext, RouteInfo, RoutePage } from 'qoobee';
+import { RouteInfo } from 'qoobee';
 import * as React from 'react';
 
 import { PageContent, PageHeader, PageWrapper } from '@/components';
-import {
-    READINGS_ARTICLE_URL,
-    READINGS_TOPIC_URL,
-    READINGS_URL
-} from '@/configs';
-import { AppPageProps, policies, WithDomainContext } from '@/domain';
+import { READINGS_ARTICLE_URL, READINGS_TOPIC_URL } from '@/configs';
+import { AppPageProps, BasePageComponent, policies } from '@/domain';
 import { text } from '@/i18n';
 import { replaceRoutePath } from '@/utilities';
 
 import { ArticleFetcher } from './containers';
 
-type ReadingsArticleDetailsProps = AppPageProps<{ readonly id: number }>;
+type ReadingsArticleDetailsProps = AppPageProps<{
+    readonly topicSlug: string;
+    readonly articleSlug: string;
+}>;
 
-export class ReadingsArticleDetails extends RoutePage<ReadingsArticleDetailsProps> {
+export class ReadingsArticleDetails extends BasePageComponent<ReadingsArticleDetailsProps> {
     public static readonly routeInfo: RouteInfo = {
         path: READINGS_ARTICLE_URL,
         title: 'Readings',
@@ -23,23 +22,20 @@ export class ReadingsArticleDetails extends RoutePage<ReadingsArticleDetailsProp
         policies: [policies.locationAllowed]
     };
 
-    public static readonly contextType = RootContext;
-    public readonly context!: WithDomainContext;
-
     public render() {
 
         const { match } = this.props;
-        const topicId = match.params.id;
+        const { topicSlug, articleSlug } = match.params;
 
         return (
             <PageWrapper>
                 <PageHeader
-                    defaultBackUrl=""
+                    defaultBackUrl={replaceRoutePath(READINGS_TOPIC_URL, { topicSlug })}
                     subTitle={ReadingsArticleDetails.routeInfo.title as string}
                     description={text('Select a artile in this topic to start learning.')}
                 />
                 <PageContent>
-                    <ArticleFetcher topicId={topicId} />
+                    <ArticleFetcher articleSlug={articleSlug} />
                 </PageContent>
             </PageWrapper>
         );

@@ -2,14 +2,14 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { RestfulRender } from 'react-restful';
 
-import { Loading, Pagination } from '@/components';
+import { DelayRender, Loading, Pagination } from '@/components';
 import { BasePaginationComponent } from '@/domain';
 import { articleResources } from '@/restful';
 
 import { ArticleList } from './articles-fetcher';
 
 interface ArticlesFetcherProps {
-    readonly topicId: number;
+    readonly topicSlug: string;
 }
 
 interface ArticleFetcherState {
@@ -26,14 +26,15 @@ export class ArticlesFetcher extends BasePaginationComponent<ArticlesFetcherProp
             requestParams: [
                 ...this.getDefaultRequestParams(),
                 {
-                    type: 'path',
-                    parameter: 'id',
-                    value: props.topicId
+                    type: 'query',
+                    parameter: 'topic.slug',
+                    value: props.topicSlug
                 }]
         };
     }
 
     public render() {
+        const { topicSlug } = this.props;
         const { requestParams, totalItem } = this.state;
 
         return (
@@ -45,7 +46,7 @@ export class ArticlesFetcher extends BasePaginationComponent<ArticlesFetcherProp
                     if (!data && fetching) {
                         return <Loading />;
                     }
-                    
+
                     return (
                         <div
                             className={classNames({
@@ -57,18 +58,22 @@ export class ArticlesFetcher extends BasePaginationComponent<ArticlesFetcherProp
                                 className="container-small mb-3"
                                 articles={data || undefined}
                                 loading={fetching}
+                                topicSlug={topicSlug}
                             />
-                            <Pagination
-                                className={classNames({
-                                    'mr-3': this.isSmallDevice(),
-                                    'pagination-vertical': this.isSmallDevice()
-                                })}
-                                totalItem={totalItem}
-                                vetical={this.isSmallDevice()}
-                                limit={this.getPaginationMeta('_limit')}
-                                start={this.getPaginationMeta('_start')}
-                                getPagerUrl={this.getPagerUrl}
-                            />
+                            <DelayRender timeout={this.isSmallDevice() ? 0 : 700}>
+                                <Pagination
+                                    className={classNames({
+                                        'mr-3': this.isSmallDevice(),
+                                        'pagination-vertical': this.isSmallDevice()
+                                    })}
+                                    totalItem={totalItem}
+                                    vetical={this.isSmallDevice()}
+                                    limit={this.getPaginationMeta('_limit')}
+                                    start={this.getPaginationMeta('_start')}
+                                    getPagerUrl={this.getPagerUrl}
+                                    loading={fetching}
+                                />
+                            </DelayRender>
                         </div>
                     );
                 }}

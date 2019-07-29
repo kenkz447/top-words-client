@@ -15,6 +15,7 @@ interface DomainContext extends AppCoreContext<{}> {
     readonly globalModal?: GlobalModalModalProps;
     readonly globalModalProgressing?: boolean;
     readonly globalModalVisibled?: boolean;
+    readonly routeParams: {} | null;
 }
 
 export type WithDomainContext = WithContextProps<DomainContext, {}>;

@@ -26,6 +26,7 @@ interface PaginationProps {
     readonly totalItem?: number;
     readonly getPagerUrl: (pageIndex: number) => void;
     readonly vetical?: boolean;
+    readonly loading: boolean;
 }
 
 export class Pagination extends React.PureComponent<PaginationProps> {
@@ -34,8 +35,37 @@ export class Pagination extends React.PureComponent<PaginationProps> {
         totalItem: 0
     };
 
-    public render() {
-        const { getPagerUrl, className, totalItem, limit, start, vetical } = this.props;
+    private readonly generatePageRange = (currentPage: number, lastPage: number, delta = 2) => {
+        // creates array with base 1 index
+        const range = Array(lastPage)
+            .fill(1)
+            .map((_, index) => index + 1);
+
+        return range.reduce(
+            (pages, page) => {
+                // allow adding of first and last pages
+                if (page === 1 || page === lastPage) {
+                    return [...pages, page];
+                }
+
+                // if within delta range add page
+                if (page - delta <= currentPage && page + delta >= currentPage) {
+                    return [...pages, page];
+                }
+
+                // otherwise add 'gap if gap was not the last item added.
+                if (pages[pages.length - 1] !== '...') {
+                    return [...pages, '...'];
+                }
+
+                return pages;
+            },
+            []
+        );
+    }
+
+    private readonly getPager = () => {
+        const { getPagerUrl, totalItem, limit, start, loading } = this.props;
         const totalPage = Math.ceil(totalItem! / limit);
 
         if (totalPage <= 0) {
@@ -44,16 +74,37 @@ export class Pagination extends React.PureComponent<PaginationProps> {
 
         const currentPageIndex = start / limit;
 
+        const pageItems = this.generatePageRange(currentPageIndex, totalPage);
+
         const pagers: React.ReactElement[] = [];
-        for (let pageIndex = 0; pageIndex < totalPage; pageIndex++) {
+
+        for (const pageItem of pageItems) {
+
+            const isPageNumber = typeof pageItem === 'number';
+            const page = pageItem as number - 1;
+
             pagers.push(
-                <PaginationItem active={currentPageIndex === pageIndex}>
-                    <PaginationLink tag={Link} to={getPagerUrl(pageIndex)}>
-                        {pageIndex + 1}
+                <PaginationItem
+                    active={currentPageIndex === page}
+                    disabled={!isPageNumber || loading}
+                >
+                    <PaginationLink
+                        tag={Link}
+                        to={isPageNumber && getPagerUrl(page)}
+                    >
+                        {pageItem}
                     </PaginationLink>
                 </PaginationItem>
             );
         }
+
+        return pagers;
+    }
+
+    public render() {
+        const { className, vetical } = this.props;
+
+        const pagers = this.getPager();
 
         return (
             <PaginationWrapper className={classNames(className, { 'vertical': vetical === true })}>

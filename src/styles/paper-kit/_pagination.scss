@@ -11,8 +11,11 @@
     color: $danger-color;
     height: $line-height;
     margin: 0 2px;
-    min-width: 36px;
-    padding: 8px 12px;
+    width: 36px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-weight: $font-weight-bold;
 }
 .nav-pills-default > li > a,
