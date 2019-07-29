@@ -2,7 +2,6 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { Loading } from '@/components';
-import { text } from '@/i18n';
 import { Article } from '@/restful';
 
 const ArticleContentWrapper = styled.article`
@@ -14,6 +13,13 @@ interface ArticleContentProps {
 }
 
 export class ArticleContent extends React.PureComponent<ArticleContentProps> {
+
+    private readonly getContext = () => {
+        const { article } = this.props;
+
+        return article!.content.replace(/(?:\r\n|\r|\n)/g, '<br>');
+    }
+
     public render() {
         const { article } = this.props;
 
@@ -25,11 +31,14 @@ export class ArticleContent extends React.PureComponent<ArticleContentProps> {
             );
         }
 
+        const textContent = this.getContext();
+
         return (
             <ArticleContentWrapper>
-                <p className="text-justify font-size-large">
-                    {article.content}
-                </p>
+                <p
+                    className="text-justify font-size-large"
+                    dangerouslySetInnerHTML={{ __html: textContent }}
+                />
             </ArticleContentWrapper>
         );
     }
