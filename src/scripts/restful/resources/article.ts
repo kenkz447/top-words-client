@@ -9,6 +9,7 @@ export interface Article {
     readonly slug: string;
     readonly vocabularies: Vocabulary[];
     readonly cloze?: string;
+    readonly topic: string;
 }
 
 export const articleType = new ResourceType<Article>({
@@ -26,8 +27,5 @@ export const articleResources = {
     getOne: new Resource<Article, Article>({
         resourceType: articleType,
         url: '/articles/:id'
-    }),
-    getNextAndPrev: new Resource<Article, { readonly prev: Article, readonly next: Article }>({
-        url: '/articles/prev-and-next/:id'
     })
 };

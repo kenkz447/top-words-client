@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RestfulRender } from 'react-restful';
+import { RequestParameter, RestfulRender } from 'react-restful';
 import { Link } from 'react-router-dom';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
@@ -9,78 +9,114 @@ import { Article, articleResources } from '@/restful';
 import { replaceRoutePath } from '@/utilities';
 
 interface ArticlePrevNextProps {
-    readonly article: Article | null;
+    readonly article: Article;
 }
 
 export class ArticlePrevNext extends BaseComponent<ArticlePrevNextProps> {
+
+    private readonly defaultParams: RequestParameter[] = [{
+        type: 'query',
+        parameter: 'topic',
+        value: this.props.article.topic
+    },
+    {
+        type: 'query',
+        parameter: '_limit',
+        value: 1
+    }];
+
     public render() {
         const { routeParams } = this.context;
 
         const { article } = this.props;
 
-        if (!article) {
-            return null;
-        }
-
         return (
-            <RestfulRender
-                resource={articleResources.getNextAndPrev}
-                parameters={[
-                    {
-                        type: 'path',
-                        parameter: 'id',
-                        value: article.id
-                    },
-                    {
-                        type: 'query',
-                        parameter: 'topic',
-                        value: article.id
-                    }
-                ]}
-            >
-                {(render) => {
-                    const { data } = render;
-
-                    const prevPath = data && replaceRoutePath(
-                        READINGS_ARTICLE_URL,
+            <Pagination>
+                <RestfulRender
+                    resource={articleResources.getAll}
+                    parameters={[
+                        ...this.defaultParams,
                         {
-                            ...routeParams,
-                            articleSlug: data.prev.slug
-                        }
-                    );
+                            type: 'query',
+                            parameter: '_id_lt',
+                            value: article.id
+                        },
 
-                    const nextPath = data && replaceRoutePath(
-                        READINGS_ARTICLE_URL,
                         {
-                            ...routeParams,
-                            articleSlug: data.next.slug
+                            type: 'query',
+                            parameter: '_sort',
+                            value: 'id,desc'
                         }
-                    );
+                    ]}
+                >
+                    {(render) => {
+                        const { data } = render;
 
-                    return (
-                        <Pagination>
-                            <PaginationItem disabled={!data || !data.prev}>
+                        const prevArticle = data && data[0];
+                        const toPatch = prevArticle && replaceRoutePath(
+                            READINGS_ARTICLE_URL,
+                            {
+                                ...routeParams,
+                                articleSlug: prevArticle.slug
+                            }
+                        );
+
+                        return (
+                            <PaginationItem disabled={!toPatch}>
                                 <PaginationLink
                                     tag={Link}
                                     replace={true}
-                                    to={prevPath}
+                                    to={toPatch}
                                     previous={true}
                                     href="#"
                                 />
                             </PaginationItem>
-                            <PaginationItem disabled={!data || !data.next}>
+                        );
+                    }}
+                </RestfulRender>
+                <RestfulRender
+                    resource={articleResources.getAll}
+                    parameters={[
+                        ...this.defaultParams,
+                        {
+                            type: 'query',
+                            parameter: '_id_gt',
+                            value: article.id
+                        },
+                        {
+                            type: 'query',
+                            parameter: '_sort',
+                            value: 'id,asc'
+                        }
+                    ]}
+                >
+                    {(render) => {
+                        const { data } = render;
+
+                        const nextArticle = data && data[0];
+
+                        const toPatch = nextArticle && replaceRoutePath(
+                            READINGS_ARTICLE_URL,
+                            {
+                                ...routeParams,
+                                articleSlug: nextArticle.slug
+                            }
+                        );
+
+                        return (
+                            <PaginationItem disabled={!toPatch}>
                                 <PaginationLink
                                     tag={Link}
                                     replace={true}
-                                    to={nextPath}
+                                    to={toPatch}
                                     next={true}
                                     href="#"
                                 />
                             </PaginationItem>
-                        </Pagination>
-                    );
-                }}
-            </RestfulRender>
+                        );
+                    }}
+                </RestfulRender>
+            </Pagination>
         );
     }
 }

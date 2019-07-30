@@ -8,6 +8,10 @@ import { getToken } from '@/utilities';
 import { DefaultMeta } from './resources';
 
 const commonParser = (value) => {
+    if (value && (value._id || value.id)) {
+        return value._id || value.id;
+    }
+
     if (isDate(value) || isMoment(value)) {
         return value.toISOString();
     }

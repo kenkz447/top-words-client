@@ -1,15 +1,5 @@
 import * as React from 'react';
-import {
-    Button,
-    Nav,
-    NavItem,
-    NavLink,
-    Pagination,
-    PaginationItem,
-    PaginationLink,
-    TabContent,
-    TabPane
-} from 'reactstrap';
+import { Button, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 
 import { SlideUp } from '@/components';
 import { BaseComponent } from '@/domain';
