@@ -7,7 +7,6 @@ import { text } from '@/i18n';
 import { Article } from '@/restful';
 
 import {
-    ArticleCloze,
     ArticleContent,
     ArticleHeader,
     ArticleLearning,
@@ -79,14 +78,6 @@ export class ArticleControl extends BaseComponent<ArticleControlProps, ArticleCo
                                                         Reading
                                                     </NavLink>
                                                 </NavItem>
-                                                <NavItem>
-                                                    <NavLink
-                                                        className={this.classNames({ active: activeTab === 'cloze' })}
-                                                        onClick={() => this.setState({ activeTab: 'cloze' })}
-                                                    >
-                                                        Cloze
-                                                    </NavLink>
-                                                </NavItem>
                                             </Nav>
                                         </div>
                                     </div>
@@ -96,9 +87,6 @@ export class ArticleControl extends BaseComponent<ArticleControlProps, ArticleCo
                                         </TabPane>
                                         <TabPane tabId="reading">
                                             <ArticleContent article={article} />
-                                        </TabPane>
-                                        <TabPane tabId="cloze">
-                                            <ArticleCloze article={article} />
                                         </TabPane>
                                     </TabContent>
                                 </div>
