@@ -19,7 +19,7 @@ export class ArticleCloze extends React.PureComponent<ArticleClozeProps> {
                     textContents.map((textContent, index) => (
                         <p
                             key={index}
-                            className="text-justify font-size-large"
+                            className="text-justify"
                         >
                             {textContent}
                         </p>

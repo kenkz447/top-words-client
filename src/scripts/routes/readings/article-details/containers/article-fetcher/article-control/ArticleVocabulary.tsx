@@ -29,7 +29,7 @@ export class ArticleVocabulary extends React.PureComponent<ArticleVocabularyProp
                             <th>Meaning</th>
                         </tr>
                     </thead>
-                    <tbody className="font-size-large">
+                    <tbody>
                         {article.vocabularies.map((vocabulary, index) => {
                             return (
                                 <tr key={vocabulary.id}>

@@ -31,7 +31,7 @@ export class ArticleControl extends BaseComponent<ArticleControlProps, ArticleCo
 
         this.state = {
             isLearning: false,
-            activeTab: 'content'
+            activeTab: 'reading'
         };
     }
 
@@ -56,7 +56,7 @@ export class ArticleControl extends BaseComponent<ArticleControlProps, ArticleCo
                         : (
                             <SlideUp className=" container-medium ">
                                 <div className="mb-4">
-                                    <div className="nav-tabs-navigation">
+                                    <div className="nav-tabs-navigation mb-4">
                                         <div className="nav-tabs-wrapper">
                                             <Nav tabs={true}>
                                                 <NavItem>
@@ -73,10 +73,10 @@ export class ArticleControl extends BaseComponent<ArticleControlProps, ArticleCo
                                                 </NavItem>
                                                 <NavItem>
                                                     <NavLink
-                                                        className={this.classNames({ active: activeTab === 'content' })}
-                                                        onClick={() => this.setState({ activeTab: 'content' })}
+                                                        className={this.classNames({ active: activeTab === 'reading' })}
+                                                        onClick={() => this.setState({ activeTab: 'reading' })}
                                                     >
-                                                        Writing
+                                                        Reading
                                                     </NavLink>
                                                 </NavItem>
                                                 <NavItem>
@@ -94,7 +94,7 @@ export class ArticleControl extends BaseComponent<ArticleControlProps, ArticleCo
                                         <TabPane tabId="vocabulary">
                                             <ArticleVocabulary article={article} />
                                         </TabPane>
-                                        <TabPane tabId="content">
+                                        <TabPane tabId="reading">
                                             <ArticleContent article={article} />
                                         </TabPane>
                                         <TabPane tabId="cloze">

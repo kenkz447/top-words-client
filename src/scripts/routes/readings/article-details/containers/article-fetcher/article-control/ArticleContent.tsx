@@ -19,7 +19,7 @@ export class ArticleContent extends React.PureComponent<ArticleContentProps> {
                     textContents.map((textContent, index) => (
                         <p
                             key={index}
-                            className="text-justify font-size-large"
+                            className="text-justify"
                             dangerouslySetInnerHTML={{ __html: textContent }}
                         />
                     ))

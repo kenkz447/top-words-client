@@ -12,8 +12,8 @@ const PageHeaderWrapper = styled.header`
     margin-bottom: 24px;
     
     .back {
-        height: 36px;
-        line-height: 36px;
+        height: 30px;
+        line-height: 30px;
         font-size: 16px;
         &-link {
             color: var(--info)!important;
