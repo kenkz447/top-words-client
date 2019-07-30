@@ -11,3 +11,7 @@ export const stripAccents = (function () {
 
     return (s: string) => s.replace(charsRgx, lookup);
 })();
+
+export const splitContentByNewline = (textContent: string) => {
+    return textContent.split(/(?:\r\n|\r|\n)/g);
+};

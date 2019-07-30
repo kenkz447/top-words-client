@@ -1,10 +1,14 @@
 import { Resource, ResourceType } from 'react-restful';
 
+import { Vocabulary } from './vocabulary';
+
 export interface Article {
     readonly id: string;
     readonly name: string;
     readonly content: string;
     readonly slug: string;
+    readonly vocabularies: Vocabulary[];
+    readonly cloze?: string;
 }
 
 export const articleType = new ResourceType<Article>({

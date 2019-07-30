@@ -20,8 +20,6 @@
 }
 .nav-pills-default > li > a,
 .pagination > li > a:hover,
-.pagination > li > a:focus,
-.pagination > li > a:active,
 .pagination > li.active > a,
 .pagination > li.active > span,
 .pagination > li.active > a:hover,
@@ -293,8 +291,6 @@
     background-color: $danger-color !important;
 }
 .pagination > li > a:hover,
-.pagination > li > a:focus,
-.pagination > li > a:active,
 .pagination > li.active > a,
 .pagination > li.active > span,
 .pagination > li.active > a:hover,
@@ -318,5 +314,6 @@
 .pagination {
   .page-link {
     box-shadow: none;
+    transition: all .3s;
   }
 }

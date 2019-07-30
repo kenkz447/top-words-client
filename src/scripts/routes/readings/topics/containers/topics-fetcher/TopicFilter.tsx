@@ -19,14 +19,13 @@ export class TopicFilter extends BaseComponent<TopicFilterProps> {
         intermediateUrl.searchParams.set('level', 'intermediate');
 
         return (
-            <Nav pills={true} className={this.classNames('nav-pills-danger')}>
+            <Nav pills={true} className={this.classNames('nav-pills-danger', 'text-center')}>
                 <NavItem className="w-50">
                     <NavLink
                         tag={Link}
                         to={`${beginnerUrl.pathname}${beginnerUrl.search}`}
                         replace={true}
                         active={currentLevel === 'beginner'}
-
                     >
                         Beginner
                     </NavLink>

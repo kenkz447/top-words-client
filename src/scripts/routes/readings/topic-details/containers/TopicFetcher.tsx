@@ -22,9 +22,10 @@ export class TopicFetcher extends React.PureComponent<TopicFetcherProps> {
             >
                 {({ data, fetching }) => {
                     return (
-                        <p className="mb-3 h4"><span className="text-muted">
-                            Topic: </span> {data ? data[0].name : '{...}'}
-                        </p>
+                        <div>
+                            <span className="text-muted"> Topic </span>
+                            <h2 className="mt-2 mb-3 h4"> {data ? data[0].name : '{...}'}</h2>
+                        </div>
                     );
                 }}
             </RestfulRender>

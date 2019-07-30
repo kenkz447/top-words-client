@@ -17,6 +17,7 @@ export class ArticlePrevNext extends BaseComponent<ArticlePrevNextProps> {
         const { routeParams } = this.context;
 
         const { article } = this.props;
+
         if (!article) {
             return null;
         }
@@ -24,11 +25,18 @@ export class ArticlePrevNext extends BaseComponent<ArticlePrevNextProps> {
         return (
             <RestfulRender
                 resource={articleResources.getNextAndPrev}
-                parameters={{
-                    type: 'path',
-                    parameter: 'id',
-                    value: article.id
-                }}
+                parameters={[
+                    {
+                        type: 'path',
+                        parameter: 'id',
+                        value: article.id
+                    },
+                    {
+                        type: 'query',
+                        parameter: 'topic',
+                        value: article.id
+                    }
+                ]}
             >
                 {(render) => {
                     const { data } = render;
@@ -70,7 +78,7 @@ export class ArticlePrevNext extends BaseComponent<ArticlePrevNextProps> {
                                 />
                             </PaginationItem>
                         </Pagination>
-                    )
+                    );
                 }}
             </RestfulRender>
         );

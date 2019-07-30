@@ -5,7 +5,14 @@ import { text } from '@/i18n';
 import { Article } from '@/restful';
 
 const ArticleHeaderWrapper = styled.article`
-    margin-bottom: 24px;
+    .article-name::after {
+        content: " ";
+        display: block;
+        width: 75px;
+        height: 3px;
+        background: var(--danger);
+        margin-top: 6px;
+    }
 `;
 
 interface ArticleHeaderProps {
@@ -18,8 +25,9 @@ export class ArticleHeader extends React.PureComponent<ArticleHeaderProps> {
 
         return (
             <ArticleHeaderWrapper>
-                <h4 className="mb-3">
-                    <span className="text-muted">{text('Article')}: </span> {article ? article.name : '{...}'}
+                <span className="text-muted">{text('Article')}</span>
+                <h4 className="mt-2 mb-3 article-name">
+                    {article ? article.name : '{...}'}
                 </h4>
             </ArticleHeaderWrapper>
         );
