@@ -18,6 +18,7 @@ export interface ArticleLearningBaseState {
     readonly currentInputValue: string;
     readonly isReadonly: boolean;
     readonly hint?: string;
+    readonly processPercent: number;
 }
 
 export class ArticleLearningBase<P> extends BaseComponent<
@@ -66,7 +67,8 @@ export class ArticleLearningBase<P> extends BaseComponent<
 
             currentContentIndex: 0,
             isReadonly: false,
-            currentInputValue: ''
+            currentInputValue: '',
+            processPercent: 0
         };
 
         events.addListener('ARTICLE_LEARNING_PLAY_TEXT', () => this.desertSpeechRate());
@@ -96,11 +98,14 @@ export class ArticleLearningBase<P> extends BaseComponent<
 
     public readonly goToNextContent = async () => {
         const { onCompleted } = this.props;
-        const { currentContentIndex } = this.state;
+        const { currentContentIndex, contents } = this.state;
+
+        const nextContentIndex = currentContentIndex + 1;
 
         this.setState({
             isReadonly: true,
-            inputState: 'success'
+            inputState: 'success',
+            processPercent: nextContentIndex / contents.length * 100
         });
 
         await wait(1000);
@@ -108,7 +113,7 @@ export class ArticleLearningBase<P> extends BaseComponent<
         if (this.hasMoreContent) {
             this.setState({
                 isReadonly: false,
-                currentContentIndex: currentContentIndex + 1,
+                currentContentIndex: nextContentIndex,
                 currentInputValue: '',
                 inputState: 'default'
             });

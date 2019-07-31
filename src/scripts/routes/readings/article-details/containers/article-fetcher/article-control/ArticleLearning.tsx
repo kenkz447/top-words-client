@@ -7,7 +7,8 @@ import {
     Input,
     InputGroup,
     InputGroupAddon,
-    Label
+    Label,
+    Progress
 } from 'reactstrap';
 import styled from 'styled-components';
 
@@ -30,7 +31,7 @@ export class ArticleLearning extends ArticleLearningBase<ArticleLearningProps> {
 
     public render() {
         const { onStop } = this.props;
-        const { inputState, currentInputValue, hint } = this.state;
+        const { inputState, currentInputValue, hint, processPercent } = this.state;
 
         return (
             <ArticleLearningWrapper className="container-small">
@@ -67,6 +68,9 @@ export class ArticleLearning extends ArticleLearningBase<ArticleLearningProps> {
                     </FormGroup>
                     <input className="display-none" type="submit" />
                 </Form>
+                <div className="mb-4">
+                    <Progress value={processPercent} />
+                </div>
                 <div className="d-flex">
                     <div className="mr-4">
                         <Button

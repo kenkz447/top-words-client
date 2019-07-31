@@ -7,7 +7,8 @@ import {
     Input,
     InputGroup,
     InputGroupAddon,
-    Label
+    Label,
+    Progress
 } from 'reactstrap';
 import styled from 'styled-components';
 
@@ -30,7 +31,7 @@ export class ArticleVocabularyLearning extends ArticleLearningBase<ArticleVocabu
 
     public render() {
         const { onStop, contentTranslated } = this.props;
-        const { inputState, currentInputValue, hint, currentContentIndex } = this.state;
+        const { inputState, currentInputValue, hint, currentContentIndex, processPercent } = this.state;
 
         return (
             <ArticleVocabularyLearningWrapper className="container-small">
@@ -72,6 +73,9 @@ export class ArticleVocabularyLearning extends ArticleLearningBase<ArticleVocabu
                     </FormGroup>
                     <input className="display-none" type="submit" />
                 </Form>
+                <div className="mb-4">
+                    <Progress value={processPercent} />
+                </div>
                 <div className="d-flex">
                     <div className="mr-4">
                         <Button
