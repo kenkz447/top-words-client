@@ -59,6 +59,7 @@ export class ArticleControl extends BaseComponent<ArticleControlProps, ArticleCo
             case 'vocabulary':
                 return (
                     <ArticleVocabularyLearning
+                        showHintOnSubmit={true}
                         content={article.vocabularies.map(o => o.name)}
                         contentTranslated={article.vocabularies.map(o => o.translate_vi)}
                         onCompleted={() => this.toggleLearning()}

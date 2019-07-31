@@ -41,7 +41,7 @@ export class ArticleLearning extends ArticleLearningBase<ArticleLearningProps> {
                             {
                                 hint
                                     ? <span className="text-danger"> ... {hint}</span>
-                                    : text('Hold SHIFT and press ENTER to use cheat!')
+                                    : text('Press DOT key to show hint, ENTER to listen!')
                             }
                         </Label>
                         <InputGroup>
@@ -69,7 +69,7 @@ export class ArticleLearning extends ArticleLearningBase<ArticleLearningProps> {
                     <input className="display-none" type="submit" />
                 </Form>
                 <div className="mb-4">
-                    <Progress value={processPercent} />
+                    <Progress className="progress-bar-striped" value={processPercent} />
                 </div>
                 <div className="d-flex">
                     <div className="mr-4">

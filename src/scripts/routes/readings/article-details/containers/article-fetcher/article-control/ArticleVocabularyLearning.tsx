@@ -46,7 +46,7 @@ export class ArticleVocabularyLearning extends ArticleLearningBase<ArticleVocabu
                             {
                                 hint
                                     ? <span className="text-danger"> ... {hint}</span>
-                                    : text('Hold SHIFT and press ENTER to show hint!')
+                                    : text('Press ENTER to show hint!')
                             }
                         </Label>
                         <InputGroup>
@@ -74,12 +74,12 @@ export class ArticleVocabularyLearning extends ArticleLearningBase<ArticleVocabu
                     <input className="display-none" type="submit" />
                 </Form>
                 <div className="mb-4">
-                    <Progress value={processPercent} />
+                    <Progress className="progress-bar-striped" value={processPercent} />
                 </div>
                 <div className="d-flex">
                     <div className="mr-4">
                         <Button
-                            id="startLearning"
+                            id="startLearning" 
                             color="danger"
                             onClick={onStop}
                         >

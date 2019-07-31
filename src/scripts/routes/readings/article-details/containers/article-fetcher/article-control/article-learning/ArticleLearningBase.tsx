@@ -9,6 +9,7 @@ export interface ArticleLearningBaseProps {
     readonly contentTranslated?: string | string[];
     readonly onCompleted: () => void;
     readonly onStop: () => void;
+    readonly showHintOnSubmit?: boolean;
 }
 
 export interface ArticleLearningBaseState {
@@ -41,7 +42,7 @@ export class ArticleLearningBase<P> extends BaseComponent<
 
     private _isDone = false;
 
-    public readonly extraChars = [' ', '.', ',', '"', '?', '!'];
+    public readonly extraChars = [' ', '.', '\'', ',', '"', '?', '!'];
 
     public readonly initSeechRate = .85;
     public readonly maxSeechRate = 1;
@@ -96,7 +97,7 @@ export class ArticleLearningBase<P> extends BaseComponent<
         this._speechRate -= this.speechRateStep;
     }
 
-    public readonly goToNextContent = async () => {
+    private readonly goToNextContent = async () => {
         const { onCompleted } = this.props;
         const { currentContentIndex, contents } = this.state;
 
@@ -125,12 +126,12 @@ export class ArticleLearningBase<P> extends BaseComponent<
         onCompleted();
     }
 
-    public readonly start = () => {
+    private readonly start = () => {
         this.tryAddExtraCharToInput();
         this.playTextContent();
     }
 
-    public readonly playTextContent = async () => {
+    private readonly playTextContent = async () => {
         if (this._isSpeeching || !this.currentTextContent) {
             return;
         }
@@ -152,19 +153,77 @@ export class ArticleLearningBase<P> extends BaseComponent<
         events.emit('ARTICLE_LEARNING_PLAY_TEXT', { content: contentToPlay });
     }
 
-    public readonly onInputKeyUp = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-        const enterKeyCode = 13;
-        const isEnter = e.keyCode === enterKeyCode;
+    private readonly tryAddExtraCharToInput = () => {
+        const { currentInputValue } = this.state;
 
-        if (e.shiftKey && isEnter) {
+        if (!this.currentTextContent) {
+            return;
+        }
+
+        const nextInputCharPosition = currentInputValue.length;
+
+        const nextCorrectChar = this.currentTextContent.charAt(nextInputCharPosition);
+
+        const nextCharIsExtra = this.extraChars.includes(nextCorrectChar);
+
+        if (!nextCharIsExtra) {
+            return;
+        }
+
+        this.setState({
+            currentInputValue: currentInputValue + nextCorrectChar
+        });
+
+        if (nextCorrectChar === ' ') {
+            events.emit('ARTICLE_LEARNING_COMPLETED_WORD');
+        }
+    }
+
+    private readonly tryGoToNextContent = () => {
+        const { currentInputValue } = this.state;
+
+        const isCompletedCurrentContent = currentInputValue === this.currentTextContent;
+
+        if (!isCompletedCurrentContent) {
+            return;
+        }
+
+        events.emit('ARTICLE_LEARNING_COMPLETED_CONTENT');
+        this.goToNextContent();
+    }
+
+    private readonly showHint = () => {
+        if (!this.currentTextContent) {
+            return;
+        }
+
+        const currentInputProcess = this.getCurrentProcessIndex();
+        const allProcess = this.currentTextContent.split(' ');
+
+        const word = allProcess[currentInputProcess];
+
+        const hint = this.extraChars.reduce((prevValue, extraChar) => prevValue.replace(extraChar, ''), word);
+
+        this.setState({
+            hint: hint,
+            inputState: 'error'
+        });
+    }
+
+    public readonly onInputKeyUp = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+
+        const isEnter = e.keyCode === 13;
+        const isDot = e.keyCode === 190;
+
+        if (isDot) {
             const toToNextWordBtn = document.getElementById('goToNextWordBtn');
             if (toToNextWordBtn) {
-                toToNextWordBtn.click();
+                this.onGotoNextWordClick();
             }
         }
 
         if (isEnter) {
-            return await this.playTextContent();
+            await this.playTextContent();
         }
     }
 
@@ -203,50 +262,17 @@ export class ArticleLearningBase<P> extends BaseComponent<
     }
 
     public readonly onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        const { showHintOnSubmit } = this.props;
+
         e.preventDefault();
 
-        this.setState({
-            inputState: 'error'
-        });
-    }
-
-    public readonly tryAddExtraCharToInput = () => {
-        const { currentInputValue } = this.state;
-
-        if (!this.currentTextContent) {
-            return;
+        if (showHintOnSubmit) {
+            this.showHint();
+        } else {
+            this.setState({
+                inputState: 'error'
+            });
         }
-
-        const nextInputCharPosition = currentInputValue.length;
-
-        const nextCorrectChar = this.currentTextContent.charAt(nextInputCharPosition);
-
-        const nextCharIsExtra = this.extraChars.includes(nextCorrectChar);
-
-        if (!nextCharIsExtra) {
-            return;
-        }
-
-        this.setState({
-            currentInputValue: currentInputValue + nextCorrectChar
-        });
-
-        if (nextCorrectChar === ' ') {
-            events.emit('ARTICLE_LEARNING_COMPLETED_WORD');
-        }
-    }
-
-    public readonly tryGoToNextContent = () => {
-        const { currentInputValue } = this.state;
-
-        const isCompletedCurrentContent = currentInputValue === this.currentTextContent;
-
-        if (!isCompletedCurrentContent) {
-            return;
-        }
-
-        events.emit('ARTICLE_LEARNING_COMPLETED_CONTENT');
-        this.goToNextContent();
     }
 
     public readonly focusInput = () => {
@@ -268,22 +294,7 @@ export class ArticleLearningBase<P> extends BaseComponent<
     }
 
     public readonly onGotoNextWordClick = () => {
-        if (!this.currentTextContent) {
-            return;
-        }
-
-        const currentInputProcess = this.getCurrentProcessIndex();
-        const allProcess = this.currentTextContent.split(' ');
-
-        const word = allProcess[currentInputProcess];
-
-        const hint = this.extraChars.reduce((prevValue, extraChar) => prevValue.replace(extraChar, ''), word);
-
-        this.setState({
-            hint: hint,
-            inputState: 'error'
-        });
-
+        this.showHint();
         this.focusInput();
     }
 
