@@ -26,7 +26,7 @@ export class ArticleVocabulary extends React.PureComponent<ArticleVocabularyProp
                         <tr>
                             <th>#</th>
                             <th>Word</th>
-                            <th>Meaning(vi)</th>
+                            <th>Meaning (vi)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -34,8 +34,12 @@ export class ArticleVocabulary extends React.PureComponent<ArticleVocabularyProp
                             return (
                                 <tr key={vocabulary.id}>
                                     <td>{index}</td>
-                                    <td className="text-capitalize">{vocabulary.name}</td>
-                                    <td>{vocabulary.translate_vi}</td>
+                                    <td>
+                                        <span className="first-char-capitalize">{vocabulary.name}</span>
+                                    </td>
+                                    <td>
+                                        <span className="first-char-capitalize">{vocabulary.translate_vi}</span>
+                                    </td>
                                 </tr>
                             );
                         })}

@@ -37,7 +37,9 @@ export class ArticleVocabularyLearning extends ArticleLearningBase<ArticleVocabu
             <ArticleVocabularyLearningWrapper className="container-small">
                 {contentTranslated && (
                     <div className="mb-4">
-                        <p className="text-monospace">vi: {contentTranslated[currentContentIndex]}</p>
+                        <p className="text-monospace">
+                            vi: <span className="first-char-capitalize">{contentTranslated[currentContentIndex]}</span>
+                        </p>
                     </div>
                 )}
                 <Form className="mb-4" onSubmit={this.onSubmit}>
@@ -49,12 +51,14 @@ export class ArticleVocabularyLearning extends ArticleLearningBase<ArticleVocabu
                                     : text('Press ENTER to show hint!')
                             }
                         </Label>
-                        <InputGroup>
+                        <InputGroup
+                            className={inputState === 'success' ? 'has-success' : ''}
+                        >
                             <Input
                                 id="learnningInput"
                                 placeholder={text('Input your answer...')}
                                 autoFocus={true}
-                                valid={inputState === 'success'}
+                                className={inputState === 'success' ? 'forn-control-success' : ''}
                                 onKeyUp={this.onInputKeyUp}
                                 onKeyDown={this.onInputKeyDown}
                                 value={currentInputValue}
@@ -63,7 +67,7 @@ export class ArticleVocabularyLearning extends ArticleLearningBase<ArticleVocabu
                             <InputGroupAddon addonType="append">
                                 <Button
                                     id="goToNextWordBtn"
-                                    color="danger"
+                                    color={inputState === 'success' ? 'success' : 'danger'}
                                     onClick={this.onGotoNextWordClick}
                                 >
                                     <i className="nc-icon nc-user-run" />
@@ -79,7 +83,7 @@ export class ArticleVocabularyLearning extends ArticleLearningBase<ArticleVocabu
                 <div className="d-flex">
                     <div className="mr-4">
                         <Button
-                            id="startLearning" 
+                            id="startLearning"
                             color="danger"
                             onClick={onStop}
                         >

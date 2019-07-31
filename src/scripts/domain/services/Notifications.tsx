@@ -1,6 +1,11 @@
 import { events } from 'qoobee';
 import * as React from 'react';
-import { ToastProvider, withToastManager } from 'react-toast-notifications';
+import {
+    DefaultToast,
+    ToastProvider,
+    withToastManager
+} from 'react-toast-notifications';
+import styled from 'styled-components';
 
 interface NotificationsProps {
     // tslint:disable-next-line:no-any
@@ -33,4 +38,27 @@ class Notifications extends React.PureComponent<NotificationsProps> {
 
 const ToastManager = withToastManager(Notifications);
 
-export default () => <ToastProvider><ToastManager /></ToastProvider>;
+const ToastElementWrapper = styled.div`
+    > :first-child {
+        margin: 4px;
+    }
+
+    [class*="ToastElement"] {
+        min-height: 48px;
+        max-width: 336px;
+    }
+`;
+
+const MyCustomToast = (props) => {
+    return (
+        <ToastElementWrapper>
+            <DefaultToast {...props} />
+        </ToastElementWrapper>
+    );
+};
+
+export default () => (
+    <ToastProvider components={{ Toast: MyCustomToast }}>
+        <ToastManager />
+    </ToastProvider>
+);

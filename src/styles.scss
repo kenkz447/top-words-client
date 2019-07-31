@@ -38,3 +38,11 @@
         font-size: larger;
     }
 }
+
+.first-char-capitalize {
+    display: inline-block;
+
+    &::first-letter {
+        text-transform: capitalize;
+    }
+}

@@ -44,12 +44,14 @@ export class ArticleLearning extends ArticleLearningBase<ArticleLearningProps> {
                                     : text('Press DOT key to show hint, ENTER to listen!')
                             }
                         </Label>
-                        <InputGroup>
+                        <InputGroup
+                            className={inputState === 'success' ? 'has-success' : ''}
+                        >
                             <Input
                                 id="learnningInput"
                                 placeholder={text('Input your answer...')}
                                 autoFocus={true}
-                                valid={inputState === 'success'}
+                                className={inputState === 'success' ? 'forn-control-success' : ''}
                                 onKeyUp={this.onInputKeyUp}
                                 onKeyDown={this.onInputKeyDown}
                                 value={currentInputValue}
@@ -58,7 +60,7 @@ export class ArticleLearning extends ArticleLearningBase<ArticleLearningProps> {
                             <InputGroupAddon addonType="append">
                                 <Button
                                     id="goToNextWordBtn"
-                                    color="danger"
+                                    color={inputState === 'success' ? 'success' : 'danger'}
                                     onClick={this.onGotoNextWordClick}
                                 >
                                     <i className="nc-icon nc-user-run" />

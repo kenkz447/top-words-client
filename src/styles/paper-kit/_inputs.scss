@@ -12,7 +12,6 @@
     color: $font-color;
     font-size: $font-size-base;
     transition: background-color 0.3s ease 0s;
-    padding-right: 0 !important;
     @include input-size($padding-base-vertical, $padding-label-horizontal, $height-base);
     @include box-shadow(none);
 
