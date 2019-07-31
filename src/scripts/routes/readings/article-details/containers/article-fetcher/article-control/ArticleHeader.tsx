@@ -26,9 +26,9 @@ export class ArticleHeader extends React.PureComponent<ArticleHeaderProps> {
         return (
             <ArticleHeaderWrapper>
                 <span className="text-muted">{text('Article')}</span>
-                <h4 className="mt-2 mb-3 article-name">
+                <h1 className="mt-2 mb-4 h4 article-name">
                     {article ? article.name : '{...}'}
-                </h4>
+                </h1>
             </ArticleHeaderWrapper>
         );
     }

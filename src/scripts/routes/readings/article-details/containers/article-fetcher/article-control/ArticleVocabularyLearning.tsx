@@ -15,7 +15,7 @@ import { text } from '@/i18n';
 
 import { ArticleLearningBase } from './article-learning';
 
-const ArticleLearningWrapper = styled.div`
+const ArticleVocabularyLearningWrapper = styled.div`
     #goToNextWordBtn {
         padding: 0;
         font-size: 21px;
@@ -23,24 +23,29 @@ const ArticleLearningWrapper = styled.div`
     }
 `;
 
-interface ArticleLearningProps {
+interface ArticleVocabularyLearningProps {
 }
 
-export class ArticleLearning extends ArticleLearningBase<ArticleLearningProps> {
+export class ArticleVocabularyLearning extends ArticleLearningBase<ArticleVocabularyLearningProps> {
 
     public render() {
-        const { onStop } = this.props;
-        const { inputState, currentInputValue, hint } = this.state;
+        const { onStop, contentTranslated } = this.props;
+        const { inputState, currentInputValue, hint, currentContentIndex } = this.state;
 
         return (
-            <ArticleLearningWrapper className="container-small">
+            <ArticleVocabularyLearningWrapper className="container-small">
+                {contentTranslated && (
+                    <div className="mb-4">
+                        <p className="text-monospace">vi: {contentTranslated[currentContentIndex]}</p>
+                    </div>
+                )}
                 <Form className="mb-4" onSubmit={this.onSubmit}>
                     <FormGroup className={classNames({ 'has-danger': inputState === 'error' })}>
                         <Label for="learnningInput">
                             {
                                 hint
                                     ? <span className="text-danger"> ... {hint}</span>
-                                    : text('Hold SHIFT and press ENTER to use cheat!')
+                                    : text('Hold SHIFT and press ENTER to show hint!')
                             }
                         </Label>
                         <InputGroup>
@@ -78,7 +83,7 @@ export class ArticleLearning extends ArticleLearningBase<ArticleLearningProps> {
                         </Button>
                     </div>
                 </div>
-            </ArticleLearningWrapper>
+            </ArticleVocabularyLearningWrapper>
         );
     }
 }

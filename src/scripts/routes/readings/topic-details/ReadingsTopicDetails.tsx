@@ -29,6 +29,7 @@ export class ReadingsTopicDetails extends RoutePage<ReadingsTopicDetailsProps> {
             <PageWrapper>
                 <PageHeader
                     defaultBackUrl={READINGS_URL}
+                    title="Top Words"
                     subTitle={ReadingsTopicDetails.routeInfo.title as string}
                     description={text('Select a artile in this topic to start learning.')}
                 />

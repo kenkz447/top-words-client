@@ -31,8 +31,6 @@ export class ReadingsArticleDetails extends BasePageComponent<ReadingsArticleDet
             <PageWrapper>
                 <PageHeader
                     defaultBackUrl={replaceRoutePath(READINGS_TOPIC_URL, { topicSlug })}
-                    subTitle={ReadingsArticleDetails.routeInfo.title as string}
-                    description={text('Select a artile in this topic to start learning.')}
                 />
                 <PageContent>
                     <ArticleFetcher articleSlug={articleSlug} />

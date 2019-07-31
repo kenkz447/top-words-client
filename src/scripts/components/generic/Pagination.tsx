@@ -91,6 +91,7 @@ export class Pagination extends React.PureComponent<PaginationProps> {
                     <PaginationLink
                         tag={Link}
                         to={isPageNumber && getPagerUrl(page)}
+                        replace={true}
                     >
                         {pageItem}
                     </PaginationLink>

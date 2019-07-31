@@ -25,6 +25,7 @@ export class ReadingsTopics extends RoutePage<AppPageProps> {
             <PageWrapper>
                 <PageHeader
                     defaultBackUrl="/"
+                    title="Top Words"
                     subTitle={ReadingsTopics.routeInfo.title as string}
                     description={text('Select a Topic, each Topic contains many related articles.')}
                 />

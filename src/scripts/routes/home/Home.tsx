@@ -22,7 +22,10 @@ export class Home extends RoutePage<AppPageProps> {
 
         return (
             <PageWrapper>
-                <PageHeader />
+                <PageHeader
+                    title="Top Words"
+                    description="Learn English by listening, reading, writing, vocabulary and more."
+                />
                 <PageContent>
                     <Button
                         color="danger"

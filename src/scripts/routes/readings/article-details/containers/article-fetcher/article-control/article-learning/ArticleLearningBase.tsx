@@ -2,11 +2,13 @@ import { events } from 'qoobee';
 import * as React from 'react';
 
 import { BaseComponent, playAudio } from '@/domain';
-import { wait } from '@/utilities';
+import { splitsentences, wait } from '@/utilities';
 
 export interface ArticleLearningBaseProps {
     readonly content: string | string[];
+    readonly contentTranslated?: string | string[];
     readonly onCompleted: () => void;
+    readonly onStop: () => void;
 }
 
 export interface ArticleLearningBaseState {
@@ -30,7 +32,15 @@ export class ArticleLearningBase<P> extends BaseComponent<
         return currentTextContent;
     }
 
-    public readonly extraChars = [' ', ',', '"', '?', '!'];
+    private get hasMoreContent() {
+        const { contents, currentContentIndex } = this.state;
+
+        return currentContentIndex < contents.length;
+    }
+
+    private _isDone = false;
+
+    public readonly extraChars = [' ', '.', ',', '"', '?', '!'];
 
     public readonly initSeechRate = .85;
     public readonly maxSeechRate = 1;
@@ -45,7 +55,7 @@ export class ArticleLearningBase<P> extends BaseComponent<
 
         const articleContent = Array.isArray(props.content)
             ? props.content
-            : props.content.split('.').map(content => content.trim());
+            : splitsentences(props.content);
 
         this.state = {
             inputState: 'default',
@@ -86,7 +96,7 @@ export class ArticleLearningBase<P> extends BaseComponent<
 
     public readonly goToNextContent = async () => {
         const { onCompleted } = this.props;
-        const { currentContentIndex, contents } = this.state;
+        const { currentContentIndex } = this.state;
 
         this.setState({
             isReadonly: true,
@@ -95,16 +105,19 @@ export class ArticleLearningBase<P> extends BaseComponent<
 
         await wait(1000);
 
-        if (currentContentIndex === contents.length - 1) {
-            return onCompleted();
+        if (this.hasMoreContent) {
+            this.setState({
+                isReadonly: false,
+                currentContentIndex: currentContentIndex + 1,
+                currentInputValue: '',
+                inputState: 'default'
+            });
+
+            return;
         }
 
-        this.setState({
-            isReadonly: false,
-            currentContentIndex: currentContentIndex + 1,
-            currentInputValue: '',
-            inputState: 'default'
-        });
+        this._isDone = true;
+        onCompleted();
     }
 
     public readonly start = () => {
@@ -113,7 +126,7 @@ export class ArticleLearningBase<P> extends BaseComponent<
     }
 
     public readonly playTextContent = async () => {
-        if (this._isSpeeching) {
+        if (this._isSpeeching || !this.currentTextContent) {
             return;
         }
 
@@ -195,7 +208,12 @@ export class ArticleLearningBase<P> extends BaseComponent<
     public readonly tryAddExtraCharToInput = () => {
         const { currentInputValue } = this.state;
 
+        if (!this.currentTextContent) {
+            return;
+        }
+
         const nextInputCharPosition = currentInputValue.length;
+
         const nextCorrectChar = this.currentTextContent.charAt(nextInputCharPosition);
 
         const nextCharIsExtra = this.extraChars.includes(nextCorrectChar);
@@ -245,6 +263,10 @@ export class ArticleLearningBase<P> extends BaseComponent<
     }
 
     public readonly onGotoNextWordClick = () => {
+        if (!this.currentTextContent) {
+            return;
+        }
+
         const currentInputProcess = this.getCurrentProcessIndex();
         const allProcess = this.currentTextContent.split(' ');
 
@@ -261,6 +283,10 @@ export class ArticleLearningBase<P> extends BaseComponent<
     }
 
     public componentDidUpdate(prevProps: ArticleLearningBaseProps, prevState: ArticleLearningBaseState) {
+        if (this._isDone) {
+            return;
+        }
+
         if (this.state.currentContentIndex !== prevState.currentContentIndex) {
             this.playTextContent();
         }

@@ -27,6 +27,7 @@ const PageHeaderWrapper = styled.header`
 `;
 
 interface PageHeaderProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
+    readonly title?: string;
     readonly subTitle?: string;
     readonly description?: string;
     readonly defaultBackUrl?: string;
@@ -34,8 +35,7 @@ interface PageHeaderProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
 
 export class PageHeader extends React.PureComponent<PageHeaderProps> {
     public static readonly defaultProps = {
-        id: 'pageHeader',
-        description: 'Learn English by listening, reading, writing, vocabulary and more.'
+        id: 'pageHeader'
     };
 
     public static readonly contextType = RootContext;
@@ -43,10 +43,7 @@ export class PageHeader extends React.PureComponent<PageHeaderProps> {
 
     private readonly renderSubTitle = () => {
         const {
-            subTitle,
-            description,
-            defaultBackUrl,
-            ...rest
+            subTitle
         } = this.props;
 
         if (!subTitle) {
@@ -60,10 +57,29 @@ export class PageHeader extends React.PureComponent<PageHeaderProps> {
         );
     }
 
+    private readonly onClackClick = (e: React.SyntheticEvent) => {
+        e.preventDefault();
+
+        const { history } = this.context;
+
+        const { defaultBackUrl } = this.props;
+
+        if (history.length > 0) {
+            return history.goBack();
+        }
+
+        if (!defaultBackUrl) {
+            return;
+        }
+
+        history.push(defaultBackUrl);
+    }
+
     public render() {
-        const { history, currentBreakpoint } = this.context;
+        const { currentBreakpoint } = this.context;
 
         const {
+            title,
             subTitle,
             description,
             defaultBackUrl,
@@ -75,18 +91,15 @@ export class PageHeader extends React.PureComponent<PageHeaderProps> {
                 <div className="back">
                     {
                         defaultBackUrl !== undefined && (
-                            defaultBackUrl !== '' ? (
-                                <Link className="back-link" to={defaultBackUrl}>
+                            !!defaultBackUrl && (
+                                <a
+                                    className="back-link"
+                                    href={defaultBackUrl}
+                                    onClick={this.onClackClick}
+                                >
                                     <img alt="back-icon" src="/static/assets/icon-back.svg" />
-                                </Link>
+                                </a>
                             )
-                                : (
-                                    <a className="back-link" onClick={() => history.goBack()}>
-                                        <span>
-                                            {text('Back')}
-                                        </span>
-                                    </a>
-                                )
                         )
                     }
                 </div>
@@ -97,7 +110,7 @@ export class PageHeader extends React.PureComponent<PageHeaderProps> {
                             h3: currentBreakpoint === 'sm'
                         })}
                     >
-                        Top Words {this.renderSubTitle()}
+                        {title} {this.renderSubTitle()}
                     </h1>
                     <p>{description}</p>
                 </div>
