@@ -3,7 +3,7 @@ import { RequestParameter, RestfulRender } from 'react-restful';
 import { Link } from 'react-router-dom';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
-import { READINGS_ARTICLE_URL } from '@/configs';
+import { LISTEN_WRITING_ARTICLE_URL } from '@/configs';
 import { BaseComponent } from '@/domain';
 import { Article, articleResources } from '@/restful';
 import { replaceRoutePath } from '@/utilities';
@@ -54,7 +54,7 @@ export class ArticlePrevNext extends BaseComponent<ArticlePrevNextProps> {
 
                         const prevArticle = data && data[0];
                         const toPatch = prevArticle && replaceRoutePath(
-                            READINGS_ARTICLE_URL,
+                            LISTEN_WRITING_ARTICLE_URL,
                             {
                                 ...routeParams,
                                 articleSlug: prevArticle.slug
@@ -96,7 +96,7 @@ export class ArticlePrevNext extends BaseComponent<ArticlePrevNextProps> {
                         const nextArticle = data && data[0];
 
                         const toPatch = nextArticle && replaceRoutePath(
-                            READINGS_ARTICLE_URL,
+                            LISTEN_WRITING_ARTICLE_URL,
                             {
                                 ...routeParams,
                                 articleSlug: nextArticle.slug

@@ -4,7 +4,7 @@ import { ListGroup, ListGroupItem } from 'reactstrap';
 import styled from 'styled-components';
 
 import { Loading, SlideUp } from '@/components';
-import { READINGS_TOPIC_URL } from '@/configs';
+import { LISTEN_WRITING_TOPIC_URL } from '@/configs';
 import { Topic } from '@/restful';
 import { replaceRoutePath } from '@/utilities';
 
@@ -42,7 +42,7 @@ export class TopicList extends React.Component<TopicListProps> {
                                     <ListGroupItem
                                         key={topic.id}
                                         tag={Link}
-                                        to={replaceRoutePath(READINGS_TOPIC_URL, { topicSlug: topic.slug })}
+                                        to={replaceRoutePath(LISTEN_WRITING_TOPIC_URL, { topicSlug: topic.slug })}
                                         action={true}
                                     >
                                         {topic.name}

@@ -1,11 +1,9 @@
 import * as classNames from 'classnames';
 import { RootContext } from 'qoobee';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { WithDomainContext } from '@/domain';
-import { text } from '@/i18n';
 
 const PageHeaderWrapper = styled.header`
     padding: 24px 24px 0 24px;
@@ -16,11 +14,19 @@ const PageHeaderWrapper = styled.header`
         line-height: 30px;
         font-size: 16px;
         &-link {
-            color: var(--info)!important;
+            color: var(--darkgray)!important;
             height: inherit;
+            display: block;
             img {
                 height: inherit;
                 width: auto;
+                display: inline-block;
+                vertical-align: middle;
+                margin-right: 12px;
+            }
+            .back-link-text {
+                display: inline-block;
+                vertical-align: middle;
             }
         }
     }
@@ -29,13 +35,16 @@ const PageHeaderWrapper = styled.header`
 interface PageHeaderProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
     readonly title?: string;
     readonly subTitle?: string;
+    readonly subTitleColor?: string;
     readonly description?: string;
     readonly defaultBackUrl?: string;
+    readonly backBtnText?: string;
 }
 
 export class PageHeader extends React.PureComponent<PageHeaderProps> {
     public static readonly defaultProps = {
-        id: 'pageHeader'
+        id: 'pageHeader',
+        subTitleColor: 'danger'
     };
 
     public static readonly contextType = RootContext;
@@ -43,7 +52,9 @@ export class PageHeader extends React.PureComponent<PageHeaderProps> {
 
     private readonly renderSubTitle = () => {
         const {
-            subTitle
+            title,
+            subTitle,
+            subTitleColor
         } = this.props;
 
         if (!subTitle) {
@@ -52,7 +63,7 @@ export class PageHeader extends React.PureComponent<PageHeaderProps> {
 
         return (
             <React.Fragment>
-                - <span className="text-danger">{subTitle}</span>
+                {title && '-'} <span className={`text-${subTitleColor}`}>{subTitle}</span>
             </React.Fragment>
         );
     }
@@ -83,6 +94,7 @@ export class PageHeader extends React.PureComponent<PageHeaderProps> {
             subTitle,
             description,
             defaultBackUrl,
+            backBtnText,
             ...rest
         } = this.props;
 
@@ -98,6 +110,7 @@ export class PageHeader extends React.PureComponent<PageHeaderProps> {
                                     onClick={this.onClackClick}
                                 >
                                     <img alt="back-icon" src="/static/assets/icon-back.svg" />
+                                    <span className="back-link-text">{backBtnText}</span>
                                 </a>
                             )
                         )

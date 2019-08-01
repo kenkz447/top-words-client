@@ -4,7 +4,7 @@ import { ListGroup, ListGroupItem } from 'reactstrap';
 import styled from 'styled-components';
 
 import { SlideUp } from '@/components';
-import { READINGS_ARTICLE_URL } from '@/configs';
+import { LISTEN_WRITING_ARTICLE_URL } from '@/configs';
 import { Article } from '@/restful';
 import { replaceRoutePath } from '@/utilities';
 
@@ -35,7 +35,7 @@ export class ArticleList extends React.Component<ArticleListProps> {
                         {
                             articles.map(article => {
                                 const to = replaceRoutePath(
-                                    READINGS_ARTICLE_URL,
+                                    LISTEN_WRITING_ARTICLE_URL,
                                     {
                                         topicSlug: topicSlug,
                                         articleSlug: article.slug

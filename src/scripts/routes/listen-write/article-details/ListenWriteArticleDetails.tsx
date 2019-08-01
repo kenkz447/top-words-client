@@ -2,22 +2,24 @@ import { RouteInfo } from 'qoobee';
 import * as React from 'react';
 
 import { PageContent, PageHeader, PageWrapper } from '@/components';
-import { READINGS_ARTICLE_URL, READINGS_TOPIC_URL } from '@/configs';
+import {
+    LISTEN_WRITING_ARTICLE_URL,
+    LISTEN_WRITING_TOPIC_URL
+} from '@/configs';
 import { AppPageProps, BasePageComponent, policies } from '@/domain';
-import { text } from '@/i18n';
 import { replaceRoutePath } from '@/utilities';
 
 import { ArticleFetcher } from './containers';
 
-type ReadingsArticleDetailsProps = AppPageProps<{
+type ListenWriteArticleDetailsProps = AppPageProps<{
     readonly topicSlug: string;
     readonly articleSlug: string;
 }>;
 
-export class ReadingsArticleDetails extends BasePageComponent<ReadingsArticleDetailsProps> {
+export class ListenWriteArticleDetails extends BasePageComponent<ListenWriteArticleDetailsProps> {
     public static readonly routeInfo: RouteInfo = {
-        path: READINGS_ARTICLE_URL,
-        title: 'Readings',
+        path: LISTEN_WRITING_ARTICLE_URL,
+        title: 'ListenWrite',
         exact: true,
         policies: [policies.locationAllowed]
     };
@@ -30,7 +32,7 @@ export class ReadingsArticleDetails extends BasePageComponent<ReadingsArticleDet
         return (
             <PageWrapper>
                 <PageHeader
-                    defaultBackUrl={replaceRoutePath(READINGS_TOPIC_URL, { topicSlug })}
+                    defaultBackUrl={replaceRoutePath(LISTEN_WRITING_TOPIC_URL, { topicSlug })}
                 />
                 <PageContent>
                     <ArticleFetcher articleSlug={articleSlug} />

@@ -31,7 +31,7 @@ workbox.routing.registerRoute(
 
 workbox.routing.registerRoute(
     /\.*/g,
-    new workbox.strategies.CacheFirst({
+    new workbox.strategies.StaleWhileRevalidate({
         cacheName: "runtimeCaching",
         plugins: [new workbox.expiration.Plugin({ maxAgeSeconds: 86400, purgeOnQuotaError: false })]
     }),

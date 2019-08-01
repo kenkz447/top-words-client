@@ -1,3 +1,5 @@
-export const READINGS_URL = '/readings';
-export const READINGS_TOPIC_URL = READINGS_URL + '/topic/:topicSlug';
-export const READINGS_ARTICLE_URL =  READINGS_TOPIC_URL + '/:articleSlug';
+export const LISTEN_WRITING_URL = '/listen-write';
+export const LISTEN_WRITING_TOPIC_URL = LISTEN_WRITING_URL + '/topic/:topicSlug';
+export const LISTEN_WRITING_ARTICLE_URL = LISTEN_WRITING_TOPIC_URL + '/:articleSlug';
+
+export const VOCABULARY_TEST_URL = '/vocabulary-test';

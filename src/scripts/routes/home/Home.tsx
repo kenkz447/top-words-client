@@ -1,8 +1,10 @@
 import { RootContext, RouteInfo, RoutePage } from 'qoobee';
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 
 import { PageContent, PageHeader, PageWrapper } from '@/components';
+import { LISTEN_WRITING_URL, VOCABULARY_TEST_URL } from '@/configs';
 import { AppPageProps, policies, WithDomainContext } from '@/domain';
 import { text } from '@/i18n';
 
@@ -18,7 +20,6 @@ export class Home extends RoutePage<AppPageProps> {
     public readonly context!: WithDomainContext;
 
     public render() {
-        const { history } = this.context;
 
         return (
             <PageWrapper>
@@ -27,15 +28,29 @@ export class Home extends RoutePage<AppPageProps> {
                     description="Learn English by listening, reading, writing, vocabulary and more."
                 />
                 <PageContent>
-                    <Button
-                        color="danger"
-                        size="large"
-                        outline={true}
-                        className="mr-2"
-                        onClick={() => history.push('/readings')}
-                    >
-                        {text('Readings')}
-                    </Button>
+                    <div className="container-small">
+                        <Button
+                            color="danger"
+                            size="large"
+                            outline={true}
+                            className="w-50 mr-2 mb-2 btn-round"
+                            tag={Link}
+                            to={LISTEN_WRITING_URL}
+                        >
+                            {text('Listen and Write')}
+                        </Button>
+                        <Button
+                            color="info "
+                            outline={true}
+                            size="large"
+                            className="w-50 mb-2 btn-round"
+                            tag={Link}
+                            to={VOCABULARY_TEST_URL}
+                        >
+                            {text('Vocabulary test')}
+                        </Button>
+                    </div>
+
                 </PageContent>
             </PageWrapper>
         );
