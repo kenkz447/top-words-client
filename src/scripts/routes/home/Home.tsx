@@ -33,7 +33,7 @@ export class Home extends RoutePage<AppPageProps> {
                             color="danger"
                             size="large"
                             outline={true}
-                            className="w-50 mr-2 mb-2 btn-round"
+                            className="mr-2 mb-2 btn-round"
                             tag={Link}
                             to={LISTEN_WRITING_URL}
                         >
@@ -43,7 +43,7 @@ export class Home extends RoutePage<AppPageProps> {
                             color="info "
                             outline={true}
                             size="large"
-                            className="w-50 mb-2 btn-round"
+                            className="mb-2 btn-round"
                             tag={Link}
                             to={VOCABULARY_TEST_URL}
                         >

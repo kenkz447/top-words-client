@@ -3,7 +3,11 @@ import './styles.scss';
 import { startup } from './scripts';
 
 const runTheApp = () => {
-    const rootElement = window.document.getElementById('root');
+    const rootElement = document.createElement('div');
+    rootElement.setAttribute('id', 'root');
+
+    document.body.append(rootElement);
+
     startup(rootElement);
 
     if (module.hot) {

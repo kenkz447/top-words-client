@@ -36,7 +36,7 @@
             "args": [
                 "start",
                 "--silent",
-                "--react-hot-boilerplate-vscode:port=3000",
+                "--react-hot-boilerplate-vscode:port=3333",
                 "--react-hot-boilerplate-vscode:host=localhost"
             ],
             "problemMatcher": [

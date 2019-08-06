@@ -20,11 +20,11 @@ const AppContent = () => (
         ErrorPage={ErrorPage}
         setup={() => {
             Sentry.init({
-                dsn: 'https://735c3a992fd24429b4b42ea2679ce92a@sentry.io/1512148',
+                dsn: SENTRY_ID,
                 environment: SUB_ENV
             });
             Sentry.configureScope((scope) => {
-                scope.setExtra('versionHash', '$Id$');
+                scope.setExtra('versionHash', VERSION_HASH);
             });
         }}
         onError={({ error, errorInfo }) => {

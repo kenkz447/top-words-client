@@ -3,7 +3,6 @@
 const path = require('path')
 const webpack = require('webpack')
 
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CompressionPlugin = require('compression-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin');
@@ -13,11 +12,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
 const WebpackGtagPlugin = require('webpack-gtag-plugin');
-const HappyPack = require('happypack');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-const baseBuildConfig = require('./baseBuildConfigs');
-
+const baseBuildConfig = require('./baseConfigs');
 
 function makeDefinitions(definitionValues) {
     return Object.keys(definitionValues).reduce(
@@ -25,7 +22,9 @@ function makeDefinitions(definitionValues) {
 }
 
 module.exports = function getBuildConfig(options) {
-    const plugins = [];
+    const plugins = [
+        ...baseBuildConfig.plugins
+    ];
 
     const definitions = options.definitions && makeDefinitions(options.definitions)
     if (definitions) {
@@ -35,20 +34,6 @@ module.exports = function getBuildConfig(options) {
     if (options.analyzer) {
         plugins.push(new BundleAnalyzerPlugin());
     }
-
-    plugins.push(new HappyPack({
-        id: 'ts',
-        threads: 2,
-        loaders: [
-            {
-                path: 'ts-loader',
-                query: { happyPackMode: true }
-            },
-            {
-                path: 'ts-nameof-loader'
-            }
-        ]
-    }));
 
     plugins.push(new ForkTsCheckerWebpackPlugin({
         checkSyntacticErrors: true
@@ -68,11 +53,6 @@ module.exports = function getBuildConfig(options) {
         }));
     }
 
-    plugins.push(new HtmlWebpackPlugin({
-        template: 'src/template.html',
-        inject: 'body'
-    }));
-
     plugins.push(new InlineManifestWebpackPlugin())
 
     if (options.gaID) {
@@ -80,7 +60,7 @@ module.exports = function getBuildConfig(options) {
     }
 
     plugins.push(new CopyWebpackPlugin([
-        { from: './static' }
+        path.join(process.cwd(), baseBuildConfig.output.publicPath)
     ]));
 
     if (options.compression) {
@@ -92,13 +72,40 @@ module.exports = function getBuildConfig(options) {
         }));
     }
 
-    plugins.push(new WorkboxPlugin.InjectManifest({
-        swSrc: path.join('src', 'service-worker.js'),
-        exclude: [/runtime\.(.*)\.js$/]
+    plugins.push(new WorkboxPlugin.GenerateSW({
+        navigateFallback: '/static/index.html',
+        runtimeCaching: [
+            {
+                urlPattern: /\.(?:png|gif|jpg|svg|tff|otf|woff|woff2|eot)$/g,
+                handler: 'CacheFirst',
+                options: {
+                    cacheName: 'runtimeCachingAssets',
+                    expiration: {
+                        maxAgeSeconds: 30 * 24 * 60 * 60
+                    }
+                }
+            },
+            {
+                urlPattern: /\.*/,
+                handler: 'NetworkFirst',
+                options: {
+                    cacheName: 'runtimeCaching',
+                    expiration: {
+                        maxAgeSeconds: 24 * 60 * 60
+                    }
+                }
+            }
+        ],
+        exclude: [/runtime\.(.*)\.js$/],
+        clientsClaim: true,
+        skipWaiting: true
     }));
 
     return ({
         mode: 'production',
+        performance: {
+            hints: false
+        },
         stats: {
             colors: true,
             entrypoints: false,
@@ -114,8 +121,7 @@ module.exports = function getBuildConfig(options) {
             app: './src/index'
         },
         output: {
-            publicPath: '/static/',
-            path: path.join(process.cwd(), 'dist', 'static'),
+            ...baseBuildConfig.output,
             filename: '[name].[chunkhash].js',
             chunkFilename: '[name].[chunkhash].js'
         },
@@ -153,22 +159,8 @@ module.exports = function getBuildConfig(options) {
         plugins: plugins,
         module: {
             rules: [
-                {
-                    test: /\.(css|sass|scss)$/,
-                    use: [
-                        MiniCssExtractPlugin.loader,
-                        {
-                            loader: 'css-loader',
-                            options: {
-                                url: false
-                            }
-                        },
-                        {
-                            loader: 'sass-loader'
-                        }
-                    ]
-                },
-                baseBuildConfig.modules.rules.typescript
+                baseBuildConfig.modules.rules.stylesBuild,
+                baseBuildConfig.modules.rules.typescriptBuild
             ]
         },
         resolve: {

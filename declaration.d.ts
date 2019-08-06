@@ -8,6 +8,8 @@ declare module '*.scss' {
     export default content;
 }
 
+declare const VERSION_HASH: string;
+declare const SENTRY_ID: string;
 declare const API_ENTRY: string;
 declare const SUB_ENV: string;
 

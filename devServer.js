@@ -27,7 +27,6 @@ function run(port) {
     const compiler = webpack(webpackConfig);
 
     const devServerConfig = {
-        publicPath: webpackConfig.output.publicPath,
         hot: true,
         historyApiFallback: true,
         stats: {
