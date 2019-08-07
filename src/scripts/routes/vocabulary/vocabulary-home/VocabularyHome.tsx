@@ -1,16 +1,16 @@
 import { RootContext, RouteInfo, RoutePage } from 'qoobee';
 import * as React from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from 'reactstrap';
 
 import { PageContent, PageHeader, PageWrapper } from '@/components';
-import { VOCABULARY_TEST_URL } from '@/configs';
+import { VOCABULARY_RANDOM_WORDS_URL, VOCABULARY_URL } from '@/configs';
 import { AppPageProps, policies, WithDomainContext } from '@/domain';
 
-import { VocabularyTestControl } from './containers';
-
-export class VocabularyTest extends RoutePage<AppPageProps> {
+export class VocabularyHome extends RoutePage<AppPageProps> {
     public static readonly routeInfo: RouteInfo = {
-        path: VOCABULARY_TEST_URL,
-        title: 'Vocabulary Test',
+        path: VOCABULARY_URL,
+        title: 'Vocabulary',
         exact: true,
         policies: [policies.locationAllowed]
     };
@@ -23,14 +23,21 @@ export class VocabularyTest extends RoutePage<AppPageProps> {
         return (
             <PageWrapper>
                 <PageHeader
-                    subTitle="Vocabulary Test"
+                    subTitle="Vocabulary"
                     subTitleColor="info"
-                    description="Make sure you are not forget something with small test"
+                    description="Learn new words and improve your English."
                     defaultBackUrl="/"
-                    backBtnText="Top Words"
                 />
                 <PageContent>
-                    <VocabularyTestControl />
+                    <Button
+                        color="info"
+                        className="btn-round"
+                        outline={true}
+                        tag={Link}
+                        to={VOCABULARY_RANDOM_WORDS_URL}
+                    >
+                        100 random words
+                    </Button>
                 </PageContent>
             </PageWrapper>
         );

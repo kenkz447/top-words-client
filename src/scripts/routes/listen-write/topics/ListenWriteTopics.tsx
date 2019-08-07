@@ -11,7 +11,7 @@ import { TopicsFetcher } from './containers';
 export class ListenWriteTopics extends RoutePage<AppPageProps> {
     public static readonly routeInfo: RouteInfo = {
         path: LISTEN_WRITING_URL,
-        title: 'ListenWrite',
+        title: 'Listen & Write',
         exact: true,
         policies: [policies.locationAllowed]
     };
@@ -25,7 +25,6 @@ export class ListenWriteTopics extends RoutePage<AppPageProps> {
             <PageWrapper>
                 <PageHeader
                     defaultBackUrl="/"
-                    title="Top Words"
                     subTitle={ListenWriteTopics.routeInfo.title as string}
                     description={text('Select a Topic, each Topic contains many related articles.')}
                 />

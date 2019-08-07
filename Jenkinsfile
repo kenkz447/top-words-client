@@ -25,7 +25,7 @@ node {
     sh "docker run -d -p ${PORT}:${PORT} -dit --restart unless-stopped  --name ${CONTAINER_NAME} ${IMAGE_NAME}"
   }
 
-  stage('Finish') {
-    sh "docker rmi \$(docker images -f dangling=true -q)"
+  stage('Clean') {
+    sh "docker system prune"
   }
 }

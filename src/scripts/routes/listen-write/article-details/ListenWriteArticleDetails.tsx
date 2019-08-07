@@ -19,7 +19,7 @@ type ListenWriteArticleDetailsProps = AppPageProps<{
 export class ListenWriteArticleDetails extends BasePageComponent<ListenWriteArticleDetailsProps> {
     public static readonly routeInfo: RouteInfo = {
         path: LISTEN_WRITING_ARTICLE_URL,
-        title: 'ListenWrite',
+        title: 'Listen & Write',
         exact: true,
         policies: [policies.locationAllowed]
     };

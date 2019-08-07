@@ -1,85 +1,90 @@
 import * as React from 'react';
-import { Button, Card, CardBody, CardTitle, Input } from 'reactstrap';
+import {
+    Button,
+    Form,
+    FormGroup,
+    Input,
+    InputGroup,
+    InputGroupAddon,
+    Label,
+    Progress
+} from 'reactstrap';
 import styled from 'styled-components';
 
+import { Loading } from '@/components';
 import { playAudio } from '@/domain';
-import { request, Vocabulary, vocabularyResources } from '@/restful';
+import { text } from '@/i18n';
+import { Vocabulary } from '@/restful';
 
-const Timer = styled.div`
-    padding: 20px;
-    border-radius: 50%;
-    border: 2px solid #ccc;
-    width: 105px;
-    height: 105px;
-    margin: 0 auto;
+const RandomWordsPlayingWrapper = styled.div`
+    display:block;
 `;
 
-interface VocabularyTestCartProps {
+interface RandomWordsPlayingProps {
     readonly onBack: () => void;
     readonly onComplete: (correctedWords: Vocabulary[], incorrectWords: Vocabulary[]) => void;
+    readonly vocabularies: Vocabulary[];
 }
 
-interface VocabularyTestCartState {
+interface RandomWordsPlayingState {
     readonly seconLeft: number;
     readonly currentInputValue: string;
     readonly vocabularies: Vocabulary[];
-    readonly currentWord?: Vocabulary;
+    readonly currentWord: Vocabulary;
     readonly currentWordIndex: number;
     readonly addSecond: number;
     readonly correctedWords: Vocabulary[];
     readonly incorrectedWords: Vocabulary[];
 }
 
-export class VocabularyTestCart extends React.PureComponent<
-    VocabularyTestCartProps,
-    VocabularyTestCartState
+export class RandomWordsPlaying extends React.PureComponent<
+    RandomWordsPlayingProps,
+    RandomWordsPlayingState
     > {
 
-    private _interval: number;
+    private _countdownInterval: number;
     private _isSpeeching: boolean;
 
-    constructor(props: VocabularyTestCartProps) {
+    constructor(props: RandomWordsPlayingProps) {
         super(props);
 
         this.state = {
             seconLeft: 60,
             currentInputValue: '',
-            vocabularies: [],
-            currentWordIndex: NaN,
+            vocabularies: props.vocabularies,
+            currentWord: props.vocabularies[0],
+            currentWordIndex: 0,
             addSecond: 0,
             correctedWords: [],
             incorrectedWords: []
         };
-
-        this.fetchResource();
     }
 
-    private readonly playTextContent = async (text: string) => {
+    private readonly playTextContent = async (textContent: string) => {
         if (this._isSpeeching) {
             return;
         }
 
         this._isSpeeching = true;
-        await playAudio(text, .8);
+        await playAudio(textContent, .8);
         this._isSpeeching = false;
     }
 
-    private readonly fetchResource = async () => {
-        const randomVocabularies = await request(vocabularyResources.getRandom);
+    private readonly focusInput = () => {
+        const inputElement = document.getElementById('vocabularyRandomWordsInput');
 
-        this.setState(
-            {
-                vocabularies: randomVocabularies,
-                currentWord: randomVocabularies[0],
-                currentWordIndex: 0
-            }
-        );
+        if (!inputElement) {
+            return;
+        }
+
+        inputElement.focus();
     }
 
     private readonly onSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault();
 
         const { vocabularies, currentWordIndex, incorrectedWords, currentWord, addSecond } = this.state;
+
         if (!currentWord) {
             return;
         }
@@ -162,11 +167,11 @@ export class VocabularyTestCart extends React.PureComponent<
         const { correctedWords, incorrectedWords } = this.state;
 
         onComplete(correctedWords, incorrectedWords);
-        clearInterval(this._interval);
+        clearInterval(this._countdownInterval);
     }
 
-    private readonly start = () => {
-        this._interval = setInterval(
+    private readonly startCountdown = () => {
+        this._countdownInterval = setInterval(
             () => {
                 const { seconLeft, addSecond } = this.state;
                 const nextSeconLeft = seconLeft + addSecond;
@@ -195,7 +200,17 @@ export class VocabularyTestCart extends React.PureComponent<
         return `${currentWord.name[0]}...${currentWord.name[currentWord.name.length - 1]}`;
     }
 
-    public componentDidUpdate(prevProps: VocabularyTestCartProps, prevState: VocabularyTestCartState) {
+    private readonly getProcessPercent = () => {
+        const { seconLeft } = this.state;
+
+        if (seconLeft >= 60) {
+            return 100;
+        }
+
+        return seconLeft / 60 * 100;
+    }
+
+    public componentDidUpdate(prevProps: RandomWordsPlayingProps, prevState: RandomWordsPlayingState) {
         const { currentWord, currentWordIndex, vocabularies } = this.state;
 
         if (currentWordIndex > vocabularies.length) {
@@ -205,55 +220,70 @@ export class VocabularyTestCart extends React.PureComponent<
         }
 
         if (currentWord && (currentWord !== prevState.currentWord)) {
+            this.focusInput();
             this.playTextContent(currentWord.name);
         }
+    }
 
-        if (currentWordIndex === 0 && isNaN(prevState.currentWordIndex)) {
-            this.start();
-        }
+    public componentDidMount() {
+        const { currentWord } = this.state;
+        this.playTextContent(currentWord.name);
+        this.startCountdown();
     }
 
     public render() {
         const { onBack } = this.props;
-        const { seconLeft, currentInputValue, currentWord } = this.state;
+        const { currentInputValue, currentWord } = this.state;
+
+        if (!currentWord) {
+            return <Loading />;
+        }
+
+        const processPercent = this.getProcessPercent();
 
         return (
-            <Card data-color="blue" className="card-pricing no-transition">
-                <CardBody >
-                    <div className="card-icon">
-                        <Timer className="h1 text-white text-monospace">
-                            {seconLeft}
-                        </Timer>
-                    </div>
-                    <CardTitle className="h3 mb-4 text-monospace">
-                        <span className="first-char-capitalize">
-                            {currentWord ? currentWord.translate_vi.toLowerCase() : '...loading'}
-                        </span>
-                    </CardTitle>
-                    <p className="card-description">
-                        {this.getWordHint()}
-                    </p>
-                    <div className="mb-4">
-                        <form onSubmit={this.onSubmit}>
+            <RandomWordsPlayingWrapper>
+                <p className="text-monospace mb-4">
+                    vi: <span className="first-char-capitalize">
+                        {currentWord ? currentWord.translate_vi : 'loading'}
+                    </span>
+                </p>
+                <Form className="mb-4" onSubmit={this.onSubmit}>
+                    <FormGroup>
+                        <Label for="vocabularyRandomWordsInput" className="first-char-capitalize">
+                            {this.getWordHint()}
+                        </Label>
+                        <InputGroup>
                             <Input
+                                id="vocabularyRandomWordsInput"
+                                placeholder={text('Input your answer...')}
                                 autoFocus={true}
-                                className="no-border rounded-pill text-center w-75 ml-auto mr-auto"
-                                readOnly={!currentWord}
                                 value={currentInputValue}
                                 onChange={this.onInputChange}
                             />
-                        </form>
-                    </div>
-                    <div className="text-center">
-                        <Button
-                            color="link"
-                            onClick={onBack}
-                        >
-                            Back
-                        </Button>
-                    </div>
-                </CardBody>
-            </Card>
+                            <InputGroupAddon addonType="append">
+                                <Button
+                                    id="vocabularyRandomWordsSkipWordBtn"
+                                    type="submit"
+                                    color="info"
+                                    className="input-group-addon-btn"
+                                >
+                                    <i className="nc-icon nc-user-run" />
+                                </Button>
+                            </InputGroupAddon>
+                        </InputGroup>
+                    </FormGroup>
+                </Form>
+                <div className="mb-4">
+                    <Progress className="progress-bar-striped" value={processPercent} />
+                </div>
+                <Button
+                    color="info"
+                    onClick={onBack}
+                >
+                    Back
+                </Button>
+            </RandomWordsPlayingWrapper>
         );
     }
 }

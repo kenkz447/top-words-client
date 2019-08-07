@@ -13,7 +13,7 @@ type ListenWriteTopicDetailsProps = AppPageProps<{ readonly topicSlug: string }>
 export class ListenWriteTopicDetails extends RoutePage<ListenWriteTopicDetailsProps> {
     public static readonly routeInfo: RouteInfo = {
         path: LISTEN_WRITING_TOPIC_URL,
-        title: 'ListenWrite',
+        title: 'Listen & Write',
         exact: true,
         policies: [policies.locationAllowed]
     };
@@ -29,7 +29,6 @@ export class ListenWriteTopicDetails extends RoutePage<ListenWriteTopicDetailsPr
             <PageWrapper>
                 <PageHeader
                     defaultBackUrl={LISTEN_WRITING_URL}
-                    title="Top Words"
                     subTitle={ListenWriteTopicDetails.routeInfo.title as string}
                     description={text('Select a artile in this topic to start learning.')}
                 />

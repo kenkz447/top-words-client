@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 
 import { PageContent, PageHeader, PageWrapper } from '@/components';
-import { LISTEN_WRITING_URL, VOCABULARY_TEST_URL } from '@/configs';
+import { LISTEN_WRITING_URL, VOCABULARY_URL } from '@/configs';
 import { AppPageProps, policies, WithDomainContext } from '@/domain';
 import { text } from '@/i18n';
 
@@ -45,9 +45,9 @@ export class Home extends RoutePage<AppPageProps> {
                             size="large"
                             className="mb-2 btn-round"
                             tag={Link}
-                            to={VOCABULARY_TEST_URL}
+                            to={VOCABULARY_URL}
                         >
-                            {text('Vocabulary test')}
+                            {text('Vocabulary')}
                         </Button>
                     </div>
 

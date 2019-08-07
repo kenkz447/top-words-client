@@ -1,18 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
+import { HighlightTitle } from '@/components/styled';
 import { text } from '@/i18n';
 import { Article } from '@/restful';
 
 const ArticleHeaderWrapper = styled.article`
-    .article-name::after {
-        content: " ";
-        display: block;
-        width: 75px;
-        height: 3px;
-        background: var(--danger);
-        margin-top: 6px;
-    }
+    display: block;
 `;
 
 interface ArticleHeaderProps {
@@ -26,9 +20,9 @@ export class ArticleHeader extends React.PureComponent<ArticleHeaderProps> {
         return (
             <ArticleHeaderWrapper>
                 <span className="text-muted">{text('Article')}</span>
-                <h1 className="mt-2 mb-4 h4 article-name">
+                <HighlightTitle className="mt-2 mb-4 h4">
                     {article ? article.name : '{...}'}
-                </h1>
+                </HighlightTitle>
             </ArticleHeaderWrapper>
         );
     }

@@ -1,36 +1,36 @@
 import * as React from 'react';
+import { RestfulRender } from 'react-restful';
 
 import {
     caculateVocabularyTestResultScore
 } from '@/business/vocabulary-test-result';
+import { Loading } from '@/components';
 import {
-    getObjectId,
-    request,
     Vocabulary,
-    VocabularyTestResult,
-    vocabularyTestResultResources
+    vocabularyResources,
+    VocabularyTestResult
 } from '@/restful';
 
 import {
-    VocabularyTestCart,
-    VocabularyTestResultCard,
-    VocabularyTestStartCart
-} from './vocabulary-test-control';
+    RandomWordsPlaying,
+    RandomWordsResult,
+    RandomWordsStart
+} from './random-words-control';
 
-interface VocabularyTestControlProps {
+interface RandomWordsControlProps {
 }
 
-interface VocabularyTestControlState {
+interface RandomWordsControlState {
     readonly activeCard: 'start' | 'test' | 'result';
     readonly results: VocabularyTestResult[];
     readonly latestResult?: VocabularyTestResult;
 }
 
-export class VocabularyTestControl extends React.PureComponent<
-    VocabularyTestControlProps,
-    VocabularyTestControlState> {
+export class RandomWordsControl extends React.PureComponent<
+    RandomWordsControlProps,
+    RandomWordsControlState> {
 
-    constructor(props: VocabularyTestControl) {
+    constructor(props: RandomWordsControl) {
         super(props);
 
         this.state = {
@@ -65,21 +65,36 @@ export class VocabularyTestControl extends React.PureComponent<
         return (
             <div className="container-small">
                 {activeCard === 'start' &&
-                    <VocabularyTestStartCart
+                    <RandomWordsStart
                         onStart={() => this.setState({ activeCard: 'test' })}
                     />
                 }
                 {activeCard === 'test' &&
                     (
-                        <VocabularyTestCart
-                            onBack={() => this.setState({ activeCard: 'start' })}
-                            onComplete={this.onTestComplete}
-                        />
+                        <RestfulRender
+                            resource={vocabularyResources.getRandom}
+                        >
+                            {(render) => {
+                                const { data } = render;
+
+                                if (!data) {
+                                    return <Loading />;
+                                }
+
+                                return (
+                                    <RandomWordsPlaying
+                                        vocabularies={data}
+                                        onBack={() => this.setState({ activeCard: 'start' })}
+                                        onComplete={this.onTestComplete}
+                                    />
+                                );
+                            }}
+                        </RestfulRender>
                     )
                 }
                 {
                     (activeCard === 'result' && latestResult) && (
-                        <VocabularyTestResultCard
+                        <RandomWordsResult
                             onRestart={() => this.setState({ activeCard: 'test' })}
                             result={latestResult}
                         />

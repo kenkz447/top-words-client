@@ -17,12 +17,9 @@ import { text } from '@/i18n';
 import { ArticleLearningBase } from './article-learning';
 
 const ArticleLearningWrapper = styled.div`
-    #goToNextWordBtn {
-        padding: 0;
-        font-size: 21px;
-        width: 50px;
-    }
+    display: block;
 `;
+
 
 interface ArticleLearningProps {
 }
