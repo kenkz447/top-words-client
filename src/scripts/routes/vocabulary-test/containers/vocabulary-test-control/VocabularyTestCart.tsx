@@ -1,4 +1,3 @@
-import { async } from 'q';
 import * as React from 'react';
 import { Button, Card, CardBody, CardTitle, Input } from 'reactstrap';
 import styled from 'styled-components';
@@ -17,15 +16,18 @@ const Timer = styled.div`
 
 interface VocabularyTestCartProps {
     readonly onBack: () => void;
+    readonly onComplete: (correctedWords: Vocabulary[], incorrectWords: Vocabulary[]) => void;
 }
 
 interface VocabularyTestCartState {
     readonly seconLeft: number;
     readonly currentInputValue: string;
     readonly vocabularies: Vocabulary[];
-    readonly currentVocabulary?: Vocabulary;
-    readonly progressIndex: number;
+    readonly currentWord?: Vocabulary;
+    readonly currentWordIndex: number;
     readonly addSecond: number;
+    readonly correctedWords: Vocabulary[];
+    readonly incorrectedWords: Vocabulary[];
 }
 
 export class VocabularyTestCart extends React.PureComponent<
@@ -43,8 +45,10 @@ export class VocabularyTestCart extends React.PureComponent<
             seconLeft: 60,
             currentInputValue: '',
             vocabularies: [],
-            progressIndex: NaN,
-            addSecond: 1
+            currentWordIndex: NaN,
+            addSecond: 0,
+            correctedWords: [],
+            incorrectedWords: []
         };
 
         this.fetchResource();
@@ -66,17 +70,8 @@ export class VocabularyTestCart extends React.PureComponent<
         this.setState(
             {
                 vocabularies: randomVocabularies,
-                currentVocabulary: randomVocabularies[0],
-                progressIndex: 0
-            },
-            () => {
-                const { currentVocabulary } = this.state;
-
-                if (!currentVocabulary) {
-                    return;
-                }
-
-                this.playTextContent(currentVocabulary.name);
+                currentWord: randomVocabularies[0],
+                currentWordIndex: 0
             }
         );
     }
@@ -84,60 +79,95 @@ export class VocabularyTestCart extends React.PureComponent<
     private readonly onSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault();
 
-        const { vocabularies, progressIndex } = this.state;
+        const { vocabularies, currentWordIndex, incorrectedWords, currentWord, addSecond } = this.state;
+        if (!currentWord) {
+            return;
+        }
 
-        const nextProjectIndex = progressIndex + 1;
+        const nextProjectIndex = currentWordIndex + 1;
 
         this.setState(
             {
-                progressIndex: nextProjectIndex,
-                currentVocabulary: vocabularies[nextProjectIndex],
+                currentWordIndex: nextProjectIndex,
+                currentWord: vocabularies[nextProjectIndex],
                 currentInputValue: '',
-                addSecond: -6,
-            },
-            () => {
-                const { currentVocabulary } = this.state;
-
-                if (!currentVocabulary) {
-                    return;
-                }
-
-                this.playTextContent(currentVocabulary.name);
+                addSecond: addSecond + -3,
+                incorrectedWords: [
+                    ...incorrectedWords,
+                    currentWord
+                ]
             });
     }
 
     private readonly onInputChange = (e) => {
-        const { value } = e.target;
+        const nextInputValue = e.target.value as string;
 
-        const { currentVocabulary, vocabularies, progressIndex } = this.state;
-        if (!currentVocabulary) {
+        const { currentWord } = this.state;
+        if (!currentWord) {
             return;
         }
 
-        if (currentVocabulary.name === value) {
-            const nextProgesIndex = progressIndex + 1;
-            const nextVocabulary = vocabularies[nextProgesIndex];
+        const isMatching = currentWord.name.toLowerCase() === nextInputValue.toLowerCase();
+
+        if (!isMatching) {
+
             this.setState({
-                progressIndex: nextProgesIndex,
-                currentVocabulary: nextVocabulary,
-                currentInputValue: '',
-                addSecond: currentVocabulary.name.length
+                currentInputValue: nextInputValue
             });
 
-            this.playTextContent(nextVocabulary.name);
-            
             return;
         }
 
+        this.toNextWord();
+    }
+
+    private readonly toNextWord = () => {
+        const { currentWord, vocabularies, currentWordIndex, correctedWords } = this.state;
+        if (!currentWord) {
+            return;
+        }
+
+        const nextWordIndex = currentWordIndex + 1;
+
+        if (nextWordIndex === vocabularies.length) {
+            this.setState({
+                currentWordIndex: nextWordIndex,
+                currentInputValue: '',
+                correctedWords: [
+                    ...correctedWords,
+                    currentWord
+                ]
+            });
+
+            return;
+        }
+
+        const nextVocabulary = vocabularies[nextWordIndex];
+        const addSecond = currentWord.name.length;
+
         this.setState({
-            currentInputValue: value
+            currentWordIndex: nextWordIndex,
+            currentWord: nextVocabulary,
+            currentInputValue: '',
+            addSecond: addSecond,
+            correctedWords: [
+                ...correctedWords,
+                currentWord
+            ]
         });
     }
 
-    public componentDidMount() {
+    private readonly testComplete = () => {
+        const { onComplete } = this.props;
+        const { correctedWords, incorrectedWords } = this.state;
+
+        onComplete(correctedWords, incorrectedWords);
+        clearInterval(this._interval);
+    }
+
+    private readonly start = () => {
         this._interval = setInterval(
             () => {
-                const { onBack } = this.props;
                 const { seconLeft, addSecond } = this.state;
                 const nextSeconLeft = seconLeft + addSecond;
 
@@ -150,19 +180,42 @@ export class VocabularyTestCart extends React.PureComponent<
                     return;
                 }
 
-                onBack();
+                this.testComplete();
             },
             1000
         );
     }
 
-    public componentWillUnmount() {
-        clearInterval(this._interval);
+    private readonly getWordHint = () => {
+        const { currentWord } = this.state;
+        if (!currentWord) {
+            return '...';
+        }
+
+        return `${currentWord.name[0]}...${currentWord.name[currentWord.name.length - 1]}`;
+    }
+
+    public componentDidUpdate(prevProps: VocabularyTestCartProps, prevState: VocabularyTestCartState) {
+        const { currentWord, currentWordIndex, vocabularies } = this.state;
+
+        if (currentWordIndex > vocabularies.length) {
+            this.testComplete();
+
+            return;
+        }
+
+        if (currentWord && (currentWord !== prevState.currentWord)) {
+            this.playTextContent(currentWord.name);
+        }
+
+        if (currentWordIndex === 0 && isNaN(prevState.currentWordIndex)) {
+            this.start();
+        }
     }
 
     public render() {
         const { onBack } = this.props;
-        const { seconLeft, currentInputValue, currentVocabulary } = this.state;
+        const { seconLeft, currentInputValue, currentWord } = this.state;
 
         return (
             <Card data-color="blue" className="card-pricing no-transition">
@@ -173,15 +226,19 @@ export class VocabularyTestCart extends React.PureComponent<
                         </Timer>
                     </div>
                     <CardTitle className="h3 mb-4 text-monospace">
-                        {currentVocabulary ? currentVocabulary.translate_vi : '...loading'}
+                        <span className="first-char-capitalize">
+                            {currentWord ? currentWord.translate_vi.toLowerCase() : '...loading'}
+                        </span>
                     </CardTitle>
-
+                    <p className="card-description">
+                        {this.getWordHint()}
+                    </p>
                     <div className="mb-4">
                         <form onSubmit={this.onSubmit}>
                             <Input
                                 autoFocus={true}
                                 className="no-border rounded-pill text-center w-75 ml-auto mr-auto"
-                                placeholder="..."
+                                readOnly={!currentWord}
                                 value={currentInputValue}
                                 onChange={this.onInputChange}
                             />

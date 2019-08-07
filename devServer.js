@@ -17,8 +17,8 @@ function run(port) {
         host: defaultHost,
         port: port,
         defineOptions: {
-            API_ENTRY: JSON.stringify('https://topwords-api.tungnt.dev'),
-            // API_ENTRY: JSON.stringify('http://localhost:1338'),
+            // API_ENTRY: JSON.stringify('https://topwords-api.tungnt.dev'),
+            API_ENTRY: JSON.stringify('http://localhost:1338'),
             SUB_ENV: JSON.stringify('dev')
         }
     })
