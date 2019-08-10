@@ -21,7 +21,7 @@ export const splitsentences = (contentText: string) => {
         return [];
     }
 
-    const regex = /\b(\w\.\w\.|[A-Z][a-z]{1,2}\.)|([.?!])\s+(?=[A-Za-z])/g;
+    const regex = /\b(\w\.\w\.|Mr|Mrs|Ms|Mx|Dr\.)|([.?!])\s+(?=[A-Za-z])/g;
     const result = contentText.replace(regex, (m, g1, g2) => g1 ? g1 : g2 + '\r');
 
     return result.split('\r');

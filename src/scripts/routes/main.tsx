@@ -10,6 +10,7 @@ import {
     ListenWriteTopicDetails,
     ListenWriteTopics
 } from './listen-write';
+import { SpeakHome, SpeakKindergaten } from './speak';
 import { VocabularyHome, VocabularyRandomWords } from './vocabulary';
 
 export const routes = routeFrom([
@@ -18,7 +19,9 @@ export const routes = routeFrom([
     ListenWriteTopicDetails,
     ListenWriteArticleDetails,
     VocabularyHome,
-    VocabularyRandomWords
+    VocabularyRandomWords,
+    SpeakHome,
+    SpeakKindergaten
 ]);
 
 export default () => (

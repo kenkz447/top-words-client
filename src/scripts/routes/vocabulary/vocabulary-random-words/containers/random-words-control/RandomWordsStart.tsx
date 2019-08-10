@@ -13,7 +13,6 @@ export class RandomWordsStart extends React.PureComponent<RandomWordsStartProps>
             <div>
                 <p className="mb-4">
                     We will speak and display 100 random words meaning.
-                    <br />
                     You need to rewrite them all in English, good luck!
                 </p>
                 <Button

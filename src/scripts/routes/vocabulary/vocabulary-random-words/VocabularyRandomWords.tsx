@@ -34,7 +34,7 @@ export class VocabularyRandomWords extends RoutePage<AppPageProps> {
                             100 random words
                         </HighlightTitle>
                     </div>
-                    <SlideUp>
+                    <SlideUp className="container-small">
                         <RandomWordsControl />
                     </SlideUp>
                 </PageContent>

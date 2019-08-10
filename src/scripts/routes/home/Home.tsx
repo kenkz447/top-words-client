@@ -1,23 +1,20 @@
-import { RootContext, RouteInfo, RoutePage } from 'qoobee';
+import { RouteInfo } from 'qoobee';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 
 import { PageContent, PageHeader, PageWrapper } from '@/components';
-import { LISTEN_WRITING_URL, VOCABULARY_URL } from '@/configs';
-import { AppPageProps, policies, WithDomainContext } from '@/domain';
+import { LISTEN_WRITING_URL, SPEAK_URL, VOCABULARY_URL } from '@/configs';
+import { AppPageProps, BasePageComponent, policies } from '@/domain';
 import { text } from '@/i18n';
 
-export class Home extends RoutePage<AppPageProps> {
+export class Home extends BasePageComponent<AppPageProps> {
     public static readonly routeInfo: RouteInfo = {
         path: '/',
         title: 'Home',
         exact: true,
         policies: [policies.locationAllowed]
     };
-
-    public static readonly contextType = RootContext;
-    public readonly context!: WithDomainContext;
 
     public render() {
 
@@ -28,7 +25,7 @@ export class Home extends RoutePage<AppPageProps> {
                     description="Learn English by listening, reading, writing, vocabulary and more."
                 />
                 <PageContent>
-                    <div className="container-small">
+                    <div className="scroll-horizontal">
                         <Button
                             color="danger"
                             size="large"
@@ -38,6 +35,16 @@ export class Home extends RoutePage<AppPageProps> {
                             to={LISTEN_WRITING_URL}
                         >
                             {text('Listen and Write')}
+                        </Button>
+                        <Button
+                            color="success"
+                            size="large"
+                            outline={true}
+                            className="mr-2 mb-2 btn-round"
+                            tag={Link}
+                            to={SPEAK_URL}
+                        >
+                            {text('Speak')}
                         </Button>
                         <Button
                             color="info "
@@ -50,7 +57,6 @@ export class Home extends RoutePage<AppPageProps> {
                             {text('Vocabulary')}
                         </Button>
                     </div>
-
                 </PageContent>
             </PageWrapper>
         );
