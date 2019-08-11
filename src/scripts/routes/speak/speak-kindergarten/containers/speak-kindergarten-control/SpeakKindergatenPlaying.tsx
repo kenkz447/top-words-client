@@ -216,7 +216,7 @@ export class SpeakKindergatenPlaying extends BaseComponent<
 
     public render() {
         const { onBack, conversation } = this.props;
-        const { playedContents, speakPerson, currentPlayIndex } = this.state;
+        const { playedContents, speakPerson, currentPlayIndex, contentRecognizes } = this.state;
 
         return (
             <SpeakKindergatenPlayingWrapper>
@@ -226,6 +226,7 @@ export class SpeakKindergatenPlaying extends BaseComponent<
                         playedContents.map((o, i) => {
                             const isMe = o.person === speakPerson;
                             const isSpeaking = isMe && currentPlayIndex === i;
+                            const contentRrconized = contentRecognizes.find(c => c.contentIndex === i);
 
                             return (
                                 <p
@@ -240,7 +241,7 @@ export class SpeakKindergatenPlaying extends BaseComponent<
                                 >
                                     {isSpeaking && <Spinner type="grow" color="success" />}
                                     <span className={this.classNames('message', `message-${o.person}`)}>
-                                        {o.content}
+                                        {contentRrconized ? contentRrconized.content : o.content}
                                     </span>
                                 </p>
                             );
